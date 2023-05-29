@@ -1,0 +1,3 @@
+support android studio preview
+only one app state
+remove hardcoded ws base url
