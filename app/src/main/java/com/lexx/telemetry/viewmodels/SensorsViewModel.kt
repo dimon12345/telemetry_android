@@ -1,5 +1,6 @@
 package com.lexx.telemetry.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lexx.telemetry.data.SensorsRepository
@@ -27,7 +28,12 @@ class SensorsViewModel @Inject constructor(
 
     fun observeSensorsInfo() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(sensors = repository.getSensorsInfo())
+            _uiState.value = _uiState.value.copy(errorText = "")
+            try {
+                _uiState.value = _uiState.value.copy(sensors = repository.getSensorsInfo())
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(errorText = e.localizedMessage)
+            }
         }
     }
 }

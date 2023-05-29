@@ -9,21 +9,20 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-private const val BASE_URL =
-    "http://192.168.0.166:8080"
-
-/**
- * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
- */
-private val retrofit = Retrofit.Builder()
-    .addConverterFactory(GsonConverterFactory.create())
-    .baseUrl(BASE_URL)
-    .build()
-
 @Module
 @InstallIn(SingletonComponent::class)
 object SensorsDataModule {
     @Provides
+    fun providesBaseUrl() : String = "http://192.168.0.166:8080"
+
+    @Provides
     @Singleton
-    fun provideSensorsApiService() : SensorsApiService = retrofit.create(SensorsApiService::class.java)
+    fun provideRetrofit(BASE_URL : String) : Retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(BASE_URL)
+        .build()
+
+    @Provides
+    @Singleton
+    fun provideSensorsApiService(retrofit: Retrofit) : SensorsApiService = retrofit.create(SensorsApiService::class.java)
 }
