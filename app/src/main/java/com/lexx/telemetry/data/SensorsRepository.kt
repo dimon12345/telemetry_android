@@ -1,9 +1,9 @@
 package com.lexx.telemetry.data
 
-import android.util.Log
+import com.lexx.telemetry.model.SensorData
 import com.lexx.telemetry.model.SensorInfo
 import com.lexx.telemetry.network.SensorsApiService
-import java.lang.Exception
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,5 +15,15 @@ class SensorsRepository @Inject constructor(
     suspend fun getSensorsInfo(): List<SensorInfo> {
         val serverAddress = userPreferencesRepository.getServerAddress().getOrNull() ?: ""
         return sensorsApiService.getSensorsInfo("http://$serverAddress/sensors")
+    }
+
+    suspend fun getSensorsData(): Map<String, List<Pair<Float, Date>>> {
+        val serverAddress = userPreferencesRepository.getServerAddress().getOrNull() ?: ""
+        val sensorsData = sensorsApiService.getSensorsData("http://$serverAddress/data")
+        return convertSensorsData(sensorsData)
+    }
+
+    private fun convertSensorsData(sensorsData: List<SensorData>): Map<String, List<Pair<Float, Date>>> {
+        return mapOf()
     }
 }

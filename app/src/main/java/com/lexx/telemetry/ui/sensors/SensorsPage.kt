@@ -16,7 +16,7 @@ import com.lexx.telemetry.R
 import com.lexx.telemetry.viewmodels.SensorsViewModel
 
 @Composable
-fun SensorsPage(
+fun SensorsPage (
     sensorsViewModel: SensorsViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {

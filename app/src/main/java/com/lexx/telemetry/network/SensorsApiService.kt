@@ -10,5 +10,5 @@ interface SensorsApiService {
     suspend fun getSensorsInfo(@Url url: String): List<SensorInfo>
 
     @GET("data")
-    suspend fun getSensorsData(): List<SensorData>
+    suspend fun getSensorsData(@Url url: String): List<SensorData>
 }

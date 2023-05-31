@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import com.lexx.telemetry.R
 import com.lexx.telemetry.ui.navigation.NavigationAppContentType
 import com.lexx.telemetry.ui.navigation.TelemetryAppNavigationType
+import com.lexx.telemetry.ui.plot.PlotPage
 import com.lexx.telemetry.ui.sensors.SensorsPage
 import com.lexx.telemetry.ui.settings.SettingsPage
 
@@ -31,6 +32,10 @@ fun TelemetryHomeScreen(
     modifier: Modifier = Modifier
 ) {
     val navigationItemContentList = listOf(
+        NavigationItemContent(
+            navigationAppContentType = NavigationAppContentType.PLOT_CONTENT_TYPE,
+            icon = R.drawable.twotone_stacked_line_chart_24
+        ),
         NavigationItemContent(
             navigationAppContentType = NavigationAppContentType.SENSORS_CONTENT_TYPE,
             icon = R.drawable.twotone_sensors_24
@@ -75,6 +80,9 @@ private fun TelemetryAppContent(
                 .background(MaterialTheme.colorScheme.inverseOnSurface)
             ) {
                 when (navigationAppContentType) {
+                    NavigationAppContentType.PLOT_CONTENT_TYPE ->
+                        PlotPage(modifier = Modifier.weight(1f))
+
                     NavigationAppContentType.SETTINGS_CONTENT_TYPE ->
                         SettingsPage(modifier = Modifier.weight(1f))
 

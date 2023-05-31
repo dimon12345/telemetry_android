@@ -16,7 +16,7 @@ import javax.inject.Inject
 class TelemetryAppViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(TelemetryAppUiState("Noname", NavigationAppContentType.SENSORS_CONTENT_TYPE))
+    private val _uiState = MutableStateFlow(TelemetryAppUiState("Noname", NavigationAppContentType.PLOT_CONTENT_TYPE))
     val uiState: StateFlow<TelemetryAppUiState> = _uiState.asStateFlow()
 
     init {
