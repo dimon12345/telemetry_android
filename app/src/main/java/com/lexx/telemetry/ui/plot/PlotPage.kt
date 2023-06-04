@@ -5,9 +5,9 @@ import android.graphics.PointF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,16 +15,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lexx.telemetry.viewmodels.PlotViewModel
+import java.time.Instant
+import java.time.ZoneId
+
 
 @Composable
 fun PlotPage (
@@ -35,15 +35,18 @@ fun PlotPage (
     val yStep = 50
     val points = listOf(150f,100f,250f,200f,330f,300f,90f,120f,285f,199f)
     Box(
-        modifier = modifier.fillMaxSize().background(Color.DarkGray)
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.DarkGray)
     ) {
         TelemetryPlot(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(500.dp),
+                .fillMaxHeight(),
             xValues = (0..9).map { it + 1 },
             yValues = (0..6).map { (it + 1) * yStep },
             points = points,
+            plotInfo = uiState.plotInfo,
             paddingSpace = 16.dp,
             verticalStep = yStep
         )
@@ -56,10 +59,12 @@ fun TelemetryPlot(
     xValues: List<Int>,
     yValues: List<Int>,
     points: List<Float>,
+    plotInfo: PlotInfo,
     paddingSpace: Dp,
     verticalStep: Int
 ) {
     val coordinates = mutableListOf<PointF>()
+
     val density = LocalDensity.current
     val textPaint = remember(density) {
         Paint().apply {
@@ -105,22 +110,47 @@ fun TelemetryPlot(
                 coordinates.add(PointF(x1,y1))
             }
 
-            val stroke = Path().apply {
-                reset()
-                moveTo(coordinates.first().x, coordinates.first().y)
-                for (i in 0 until coordinates.size - 1) {
-                    lineTo(coordinates[i + 1].x,coordinates[i + 1].y)
+            if (plotInfo.values.isNotEmpty()) {
+                for (v in plotInfo.values) {
+                    val plotLine = v.value
+//                val plotLine = plotInfo.values[1]
+                    val instant = Instant.now()
+                    val offset = ZoneId.systemDefault().rules.getOffset(instant)
+                    val minTimestamp = plotInfo.minTimestamp.toEpochSecond(offset)
+                    val timestampRange = plotInfo.maxTimestamp.toEpochSecond(offset) - minTimestamp
+                    val minValue = plotInfo.minValue
+                    val valueRange = plotInfo.maxValue - minValue
+
+                    val plotPoints = plotLine.points
+                    val coordinates2 = mutableListOf<PointF>()
+                    for (i in plotLine.points.indices) {
+                        val x2 =
+                            size.width * (plotPoints[i].second.toEpochSecond(offset) - minTimestamp).toFloat() / timestampRange.toFloat()
+                        val y2 = size.height * (plotPoints[i].first - minValue) / valueRange
+                        coordinates2.add(PointF(x2, y2))
+                    }
+
+                    if (coordinates2.isNotEmpty()) {
+                        val stroke = Path().apply {
+                            reset()
+                            moveTo(coordinates2.first().x, coordinates2.first().y)
+                            for (i in 0 until coordinates2.size - 1) {
+                                lineTo(coordinates2[i + 1].x,coordinates2[i + 1].y)
+                            }
+                        }
+
+                        drawPath(
+                            stroke,
+                            color = Color.Black,
+                            style = Stroke(
+                                width = 1f
+                            )
+                        )
+                    }
                 }
             }
 
-            drawPath(
-                stroke,
-                color = Color.Black,
-                style = Stroke(
-                    width = 5f,
-                    cap = StrokeCap.Round
-                )
-            )
+
         }
     }
 }

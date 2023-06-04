@@ -32,7 +32,7 @@ class SensorsViewModel @Inject constructor(
             try {
                 _uiState.value = _uiState.value.copy(sensors = repository.getSensorsInfo())
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(errorText = e.localizedMessage)
+                _uiState.value = _uiState.value.copy(errorText = e.localizedMessage ?: "")
             }
         }
     }
