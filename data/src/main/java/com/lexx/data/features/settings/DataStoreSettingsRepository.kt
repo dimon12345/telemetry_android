@@ -5,13 +5,13 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.Preferences.Key
 import androidx.datastore.preferences.core.edit
-import com.lexx.domain.features.settings.UserPreferencesRepository
+import com.lexx.domain.features.settings.SettingsRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class DataStoreUserPreferencesRepository @Inject constructor(
+class DataStoreSettingsRepository @Inject constructor(
     private val dataStorePreferences: DataStore<Preferences>
-) : UserPreferencesRepository {
+) : SettingsRepository {
     private val serverAddressPreferencesKey = stringPreferencesKey(name = "server_address")
 
     override suspend fun setServerAddress(serverAddress: String) {

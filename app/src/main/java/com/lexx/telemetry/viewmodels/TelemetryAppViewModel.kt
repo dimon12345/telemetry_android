@@ -2,7 +2,6 @@ package com.lexx.telemetry.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lexx.domain.features.settings.UserPreferencesRepository
 import com.lexx.telemetry.ui.TelemetryAppUiState
 import com.lexx.telemetry.ui.navigation.NavigationAppContentType
 import dagger.hilt.android.lifecycle.HiltViewModel

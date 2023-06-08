@@ -1,6 +1,6 @@
 package com.lexx.domain.features.settings
 
-interface UserPreferencesRepository {
+interface SettingsRepository {
     suspend fun setServerAddress(serverAddress: String)
     suspend fun getServerAddress(defaultServerAddress: String = ""): String
 }

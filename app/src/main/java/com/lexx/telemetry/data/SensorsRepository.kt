@@ -1,7 +1,7 @@
 package com.lexx.telemetry.data
 
 import androidx.compose.ui.graphics.Color
-import com.lexx.domain.features.settings.UserPreferencesRepository
+import com.lexx.domain.features.settings.SettingsRepository
 import com.lexx.telemetry.model.SensorData
 import com.lexx.telemetry.model.SensorInfo
 import com.lexx.telemetry.network.SensorsApiService
@@ -16,15 +16,15 @@ import javax.inject.Singleton
 @Singleton
 class SensorsRepository @Inject constructor(
     private val sensorsApiService: SensorsApiService,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val settingsRepository: SettingsRepository
 ) {
     suspend fun getSensorsInfo(): List<SensorInfo> {
-        val serverAddress = userPreferencesRepository.getServerAddress()
+        val serverAddress = settingsRepository.getServerAddress()
         return sensorsApiService.getSensorsInfo("http://$serverAddress/sensors")
     }
 
     suspend fun getPlotInfo(): PlotInfo {
-        var serverAddress: String = userPreferencesRepository.getServerAddress()
+        var serverAddress: String = settingsRepository.getServerAddress()
         try {
             val sensorsData = sensorsApiService.getSensorsData("http://$serverAddress/data")
             return convertSensorsData(sensorsData)
