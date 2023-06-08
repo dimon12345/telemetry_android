@@ -2,8 +2,8 @@ package com.lexx.telemetry.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lexx.telemetry.data.UserPreferencesRepository
+import com.lexx.domain.features.settings.GetServerAddressUseCase
+import com.lexx.domain.features.settings.SetServerAddressUseCase
 import com.lexx.telemetry.ui.settings.SettingsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,9 +14,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val getServerAddressUseCase: GetServerAddressUseCase,
+    private val setServerAddressUseCase: SetServerAddressUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(SettingsUiState(serverAddress = DEFAULT_SERVER_ADDRESS))
+    private val defaultServerAddress = "192.168.0.166:9090"
+    private val _uiState = MutableStateFlow(SettingsUiState(serverAddress = defaultServerAddress))
     val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
 
     init {
@@ -25,19 +27,16 @@ class SettingsViewModel @Inject constructor(
 
     private fun loadSettings() {
         viewModelScope.launch {
-            val serverAddress = userPreferencesRepository.getServerAddress(DEFAULT_SERVER_ADDRESS).getOrNull() ?: DEFAULT_SERVER_ADDRESS
+            val serverAddress = getServerAddressUseCase()
             _uiState.value = _uiState.value.copy(serverAddress = serverAddress)
         }
     }
 
     fun setServerAddress(serverAddress: String) {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(serverAddress = serverAddress)
-            userPreferencesRepository.setServerAddress(serverAddress)
-        }
-    }
+        _uiState.value = _uiState.value.copy(serverAddress = serverAddress)
 
-    companion object {
-        private const val DEFAULT_SERVER_ADDRESS = "192.168.0.166:9090"
+        viewModelScope.launch {
+            setServerAddressUseCase(serverAddress)
+        }
     }
 }

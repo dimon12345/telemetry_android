@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.lexx.telemetry.data.UserPreferencesRepository
+import com.lexx.domain.features.settings.UserPreferencesRepository
 import com.lexx.telemetry.data.UserPreferencesRepositoryImpl
 import dagger.Binds
 import dagger.Module
