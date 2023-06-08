@@ -1,15 +1,16 @@
-package com.lexx.telemetry.data
+package com.lexx.data.features.settings
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.Preferences.Key
+import androidx.datastore.preferences.core.edit
 import com.lexx.domain.features.settings.UserPreferencesRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class UserPreferencesRepositoryImpl @Inject constructor(
-    private val userDataStorePreferences: DataStore<Preferences>
+class DataStoreUserPreferencesRepository @Inject constructor(
+    private val dataStorePreferences: DataStore<Preferences>
 ) : UserPreferencesRepository {
     private val serverAddressPreferencesKey = stringPreferencesKey(name = "server_address")
 
@@ -20,25 +21,23 @@ class UserPreferencesRepositoryImpl @Inject constructor(
     override suspend fun getServerAddress(
         defaultServerAddress: String
     ): String {
-        return getStringPreference(serverAddressPreferencesKey, defaultServerAddress)
+        return getStringPreference(serverAddressPreferencesKey)
     }
 
     private suspend fun setStringPreference(
-        preferenceKey: Preferences.Key<String>,
+        preferenceKey: Key<String>,
         preferenceValue: String
     ) {
-        Result.runCatching {
-            userDataStorePreferences.edit { preferences ->
-                preferences[preferenceKey] = preferenceValue
-            }
+        dataStorePreferences.edit { it ->
+            it[preferenceKey] = preferenceValue
         }
     }
     private suspend fun getStringPreference(
-        preferenceKey: Preferences.Key<String>,
+        preferenceKey: Key<String>,
         preferenceDefaultValue: String = ""
     ): String {
         return try {
-            userDataStorePreferences.data.first()[preferenceKey] ?: preferenceDefaultValue
+            dataStorePreferences.data.first()[preferenceKey] ?: preferenceDefaultValue
         } catch (e: Exception) {
             throw e
         }
