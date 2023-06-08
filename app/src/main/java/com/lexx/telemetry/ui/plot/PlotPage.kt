@@ -113,7 +113,6 @@ fun TelemetryPlot(
             if (plotInfo.values.isNotEmpty()) {
                 for (v in plotInfo.values) {
                     val plotLine = v.value
-//                val plotLine = plotInfo.values[1]
                     val instant = Instant.now()
                     val offset = ZoneId.systemDefault().rules.getOffset(instant)
                     val minTimestamp = plotInfo.minTimestamp.toEpochSecond(offset)
@@ -149,8 +148,6 @@ fun TelemetryPlot(
                     }
                 }
             }
-
-
         }
     }
 }
