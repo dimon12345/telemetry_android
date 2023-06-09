@@ -1,6 +1,6 @@
 package com.lexx.telemetry.ui.sensors
 
-import com.lexx.telemetry.model.SensorInfo
+import com.lexx.domain.models.SensorInfo
 
 data class SensorsUiState(
     val sensors: List<SensorInfo> = listOf(),

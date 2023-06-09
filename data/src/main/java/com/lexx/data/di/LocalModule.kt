@@ -21,5 +21,4 @@ object LocalModule {
     fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
         return context.dataStore
     }
-
 }

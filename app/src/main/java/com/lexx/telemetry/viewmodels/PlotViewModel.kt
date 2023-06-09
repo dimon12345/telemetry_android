@@ -2,7 +2,7 @@ package com.lexx.telemetry.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lexx.telemetry.data.SensorsRepository
+import com.lexx.telemetry.data.SensorsRepositoryOld
 import com.lexx.telemetry.ui.plot.PlotInfo
 import com.lexx.telemetry.ui.plot.PlotUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlotViewModel @Inject constructor(
-    val sensorsRepository: SensorsRepository
+    val sensorsRepositoryOld: SensorsRepositoryOld
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PlotUiState())
     val uiState: StateFlow<PlotUiState> = _uiState.asStateFlow()
@@ -28,10 +28,10 @@ class PlotViewModel @Inject constructor(
         viewModelScope.launch {
             try {
 
-                val plotInfo = sensorsRepository.getPlotInfo()
+                val plotInfo = sensorsRepositoryOld.getPlotInfo()
                 _uiState.value = _uiState.value.copy(plotInfo = plotInfo)
             } catch (e: UnknownHostException) {
-                _uiState.value = _uiState.value.copy(plotInfo = PlotInfo(errorMessage = e.localizedMessage))
+                _uiState.value = _uiState.value.copy(plotInfo = PlotInfo(errorMessage = e.localizedMessage ?: ""))
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.lexx.data.features.telemetry
+package com.lexx.data.api.telemetry.models
 
 data class SensorInfoDto(
     val nameId: Int,

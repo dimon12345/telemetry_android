@@ -2,9 +2,9 @@ package com.lexx.telemetry.data
 
 import androidx.compose.ui.graphics.Color
 import com.lexx.domain.features.settings.SettingsRepository
+import com.lexx.domain.models.SensorInfo
 import com.lexx.telemetry.model.SensorData
-import com.lexx.telemetry.model.SensorInfo
-import com.lexx.telemetry.network.SensorsApiService
+import com.lexx.telemetry.network.SensorsApiServiceOld
 import com.lexx.telemetry.ui.plot.PlotInfo
 import com.lexx.telemetry.ui.plot.PlotLineInfo
 import java.time.LocalDateTime
@@ -14,22 +14,17 @@ import javax.inject.Singleton
 
 
 @Singleton
-class SensorsRepository @Inject constructor(
-    private val sensorsApiService: SensorsApiService,
+class SensorsRepositoryOld @Inject constructor(
+    private val sensorsApiServiceOld: SensorsApiServiceOld,
     private val settingsRepository: SettingsRepository
 ) {
-    suspend fun getSensorsInfo(): List<SensorInfo> {
-        val serverAddress = settingsRepository.getServerAddress()
-        return sensorsApiService.getSensorsInfo("http://$serverAddress/sensors")
-    }
-
     suspend fun getPlotInfo(): PlotInfo {
         var serverAddress: String = settingsRepository.getServerAddress()
         try {
-            val sensorsData = sensorsApiService.getSensorsData("http://$serverAddress/data")
+            val sensorsData = sensorsApiServiceOld.getSensorsData("http://$serverAddress/data")
             return convertSensorsData(sensorsData)
         } catch (e: Exception) {
-            return PlotInfo(errorMessage = e.localizedMessage)
+            return PlotInfo(errorMessage = e.localizedMessage ?: "")
         }
     }
 
