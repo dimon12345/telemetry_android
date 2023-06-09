@@ -1,6 +1,6 @@
-package com.lexx.telemetry.model
+package com.lexx.data.api.telemetry.models
 
-data class SensorData(
+data class SensorDataDto (
     val valueId: Int,
     val nameId: Int,
     val value: Float,

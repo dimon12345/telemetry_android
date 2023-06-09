@@ -1,37 +1,31 @@
 package com.lexx.telemetry.data
 
-import androidx.compose.ui.graphics.Color
+import com.lexx.data.api.telemetry.TelemetryApiService
+import com.lexx.data.mappers.WebServiceDataMapper
 import com.lexx.domain.features.settings.SettingsRepository
-import com.lexx.domain.models.SensorInfo
-import com.lexx.telemetry.model.SensorData
-import com.lexx.telemetry.network.SensorsApiServiceOld
+import com.lexx.domain.models.SensorData
 import com.lexx.telemetry.ui.plot.PlotInfo
 import com.lexx.telemetry.ui.plot.PlotLineInfo
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
 class SensorsRepositoryOld @Inject constructor(
-    private val sensorsApiServiceOld: SensorsApiServiceOld,
-    private val settingsRepository: SettingsRepository
+    private val telemetryApiService: TelemetryApiService,
+    private val settingsRepository: SettingsRepository,
+    private val mapper: WebServiceDataMapper
 ) {
     suspend fun getPlotInfo(): PlotInfo {
         var serverAddress: String = settingsRepository.getServerAddress()
         try {
-            val sensorsData = sensorsApiServiceOld.getSensorsData("http://$serverAddress/data")
-            return convertSensorsData(sensorsData)
+            val sensorsData = telemetryApiService.getSensorsData("http://$serverAddress/data")
+            return convertSensorsData(mapper.convertSensorsData(sensorsData))
         } catch (e: Exception) {
             return PlotInfo(errorMessage = e.localizedMessage ?: "")
         }
     }
-
-    private val redColor = Color(1.0f, .0f, .0f)
-    private val greenColor = Color(.0f, 1.0f, .0f)
-    private val blueColor = Color(.0f, .0f, 1.0f)
-    private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
     private fun convertSensorsData(sensorsData: List<SensorData>): PlotInfo {
         if (sensorsData.isEmpty()) {
@@ -41,7 +35,7 @@ class SensorsRepositoryOld @Inject constructor(
         val points: MutableMap<Int, MutableList<Pair<Float, LocalDateTime>>> = mutableMapOf()
         var minValue = Float.MAX_VALUE
         var maxValue = Float.MIN_VALUE
-        var minTimestamp = convertTimestamp(sensorsData[0].timestamp)
+        var minTimestamp = sensorsData[0].timestamp
         var maxTimestamp = minTimestamp
 
         for (data in sensorsData) {
@@ -49,7 +43,7 @@ class SensorsRepositoryOld @Inject constructor(
                 points[data.nameId] = mutableListOf()
             }
 
-            val ts = convertTimestamp(data.timestamp)
+            val ts = data.timestamp
             points[data.nameId]?.add(Pair(data.value, ts))
 
             if (maxValue < data.value) {
@@ -82,7 +76,4 @@ class SensorsRepositoryOld @Inject constructor(
         )
     }
 
-    fun convertTimestamp(ts: String) : LocalDateTime {
-        return LocalDateTime.parse(ts.split(".")[0], dateFormatter)
-    }
 }
