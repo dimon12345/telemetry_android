@@ -21,10 +21,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.lexx.domain.models.PlotInfo
 import com.lexx.telemetry.viewmodels.PlotViewModel
-import java.time.Instant
-import java.time.ZoneId
-
 
 @Composable
 fun PlotPage (
@@ -94,7 +92,7 @@ fun TelemetryPlot(
                     textPaint
                 )
             }
-            /** placing y axis points */
+
             for (i in yValues.indices) {
                 drawContext.canvas.nativeCanvas.drawText(
                     "${yValues[i]}",
@@ -103,7 +101,7 @@ fun TelemetryPlot(
                     textPaint
                 )
             }
-            /** placing points */
+
             for (i in points.indices) {
                 val x1 = xAxisSpace * xValues[i]
                 val y1 = size.height - (yAxisSpace * (points[i]/verticalStep.toFloat()))
@@ -111,21 +109,18 @@ fun TelemetryPlot(
             }
 
             if (plotInfo.values.isNotEmpty()) {
-                for (v in plotInfo.values) {
-                    val plotLine = v.value
-                    val instant = Instant.now()
-                    val offset = ZoneId.systemDefault().rules.getOffset(instant)
-                    val minTimestamp = plotInfo.minTimestamp.toEpochSecond(offset)
-                    val timestampRange = plotInfo.maxTimestamp.toEpochSecond(offset) - minTimestamp
+                for (plotLine in plotInfo.values) {
+                    val minTimestamp = plotInfo.minTimestamp
+                    val timestampRange = plotInfo.maxTimestamp - minTimestamp
                     val minValue = plotInfo.minValue
                     val valueRange = plotInfo.maxValue - minValue
 
-                    val plotPoints = plotLine.points
+                    val plotPoints = plotLine.values
                     val coordinates2 = mutableListOf<PointF>()
-                    for (i in plotLine.points.indices) {
+                    for (i in plotLine.values.indices) {
                         val x2 =
-                            size.width * (plotPoints[i].second.toEpochSecond(offset) - minTimestamp).toFloat() / timestampRange.toFloat()
-                        val y2 = size.height * (plotPoints[i].first - minValue) / valueRange
+                            size.width * (plotPoints[i].timestamp - minTimestamp).toFloat() / timestampRange.toFloat()
+                        val y2 = size.height * (plotPoints[i].value - minValue) / valueRange
                         coordinates2.add(PointF(x2, y2))
                     }
 

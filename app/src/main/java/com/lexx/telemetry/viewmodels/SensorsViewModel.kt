@@ -3,7 +3,6 @@ package com.lexx.telemetry.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lexx.domain.features.sensors.GetSensorsInfoUseCase
-import com.lexx.telemetry.data.SensorsRepositoryOld
 import com.lexx.telemetry.ui.sensors.SensorsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,11 +25,7 @@ class SensorsViewModel @Inject constructor(
     fun observeSensorsInfo() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(errorText = "")
-            try {
-                _uiState.value = _uiState.value.copy(sensors = getSensorsInfoUseCase())
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(errorText = e.localizedMessage ?: "")
-            }
+            _uiState.value = _uiState.value.copy(sensors = getSensorsInfoUseCase())
         }
     }
 }

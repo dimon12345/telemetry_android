@@ -2,24 +2,26 @@ package com.lexx.data.mappers
 
 import com.lexx.data.api.telemetry.models.SensorDataDto
 import com.lexx.data.api.telemetry.models.SensorInfoDto
-import com.lexx.domain.models.SensorData
+import com.lexx.domain.models.PlotData
+import com.lexx.domain.models.PlotInfo
+import com.lexx.domain.models.PlotLineInfo
 import com.lexx.domain.models.SensorInfo
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-
 
 class WebServiceDataMapper @Inject constructor() {
     private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-    fun mapSensors(sensorsInfo: List<SensorInfoDto>): List<SensorInfo> {
-        return sensorsInfo.map {
-            mapSensor(sensorInfo = it)
+    fun mapSensors(sensorsInfoDto: List<SensorInfoDto>): List<SensorInfo> {
+        return sensorsInfoDto.map {
+            mapSensor(sensorInfoDto = it)
         }
     }
 
-    fun mapSensor(sensorInfo: SensorInfoDto): SensorInfo {
-        return with(sensorInfo) {
+    private fun mapSensor(sensorInfoDto: SensorInfoDto): SensorInfo {
+        return with(sensorInfoDto) {
             SensorInfo(
                 nameId = nameId,
                 name = name
@@ -27,28 +29,58 @@ class WebServiceDataMapper @Inject constructor() {
         }
     }
 
-    fun convertTimestamp(ts: String) : LocalDateTime {
+    private fun convertTimestamp(ts: String) : LocalDateTime {
         return LocalDateTime.parse(ts.split(".")[0], dateFormatter)
     }
 
-    fun convertSensorsData(sensorsData: List<SensorDataDto>): List<SensorData> {
-        return sensorsData.map {
-            mapSensorData(sensorData = it)
+    fun mapPlotInfo(sensorsData: List<SensorDataDto>): PlotInfo {
+        if (sensorsData.isEmpty()) {
+            return PlotInfo()
         }
-    }
 
-    private fun mapSensorData(sensorData: SensorDataDto): SensorData {
-        return with(sensorData) {
-            SensorData(
-                valueId = valueId,
-                nameId = nameId,
-                value = value,
-                timestamp = convertTimestamp(timestamp)
+        val points: MutableMap<Int, MutableList<PlotData>> = mutableMapOf()
+        var minValue = Float.MAX_VALUE
+        var maxValue = Float.MIN_VALUE
+        var minTimestamp = convertTimestamp(sensorsData[0].timestamp).toEpochSecond(ZoneOffset.UTC)
+        var maxTimestamp = minTimestamp
+
+        for (data in sensorsData) {
+            if (data.nameId !in points) {
+                points[data.nameId] = mutableListOf()
+            }
+            val ts = convertTimestamp(data.timestamp).toEpochSecond(ZoneOffset.UTC)
+            points[data.nameId]?.add(PlotData(data.value, ts))
+
+            if (maxValue < data.value) {
+                maxValue = data.value
+            }
+
+            if (minValue > data.value) {
+                minValue = data.value
+            }
+
+            if (maxTimestamp < ts) {
+                maxTimestamp = ts
+            }
+
+            if (minTimestamp > ts) {
+                minTimestamp = ts
+            }
+        }
+
+        val values = points.map {
+            PlotLineInfo(
+                nameId = it.key,
+                values = it.value
             )
         }
-    }
 
-//    fun convertSensorsData(sensorsData: List<SensorData>): PlotInfo {
-//
-//    }
+        return PlotInfo(
+            values = values,
+            minValue = minValue,
+            maxValue = maxValue,
+            minTimestamp = minTimestamp,
+            maxTimestamp = maxTimestamp
+        )
+    }
 }
