@@ -1,9 +1,8 @@
-DateTimeFormatter @Inject
-import com.lexx.data.features.sensors.RemoteSensorsInfoSource
+
 
 backlog (not mvp)
-add network name
-save names to roomdb
-add local names map and "enabled" flags
-support android studio preview ??
-only one app state ??
+=================
+* add network name
+* save names to roomdb
+* add local names map and "enabled" flags
+* support android studio preview ??

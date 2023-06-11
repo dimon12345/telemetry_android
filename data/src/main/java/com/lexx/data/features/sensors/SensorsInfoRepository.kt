@@ -8,20 +8,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
-class RemoteSensorsRepository @Inject constructor(
-    private val remoteSensorsDataSource: RemoteSensorsDataSource,
+class SensorsInfoRepository @Inject constructor(
+    private val sensorsInfoRemoteDataSource: SensorsInfoRemoteDataSource,
     private val mapper: WebServiceDataMapper,
 ) : SensorsRepository {
     override suspend fun getSensorsInfo(): List<SensorInfo> {
         val result = withContext(Dispatchers.Default) {
-            remoteSensorsDataSource.getSensors()
+            sensorsInfoRemoteDataSource.getSensors()
         }
 
         return mapper.mapSensors(result)
     }
 }
 
-interface RemoteSensorsDataSource {
+interface SensorsInfoRemoteDataSource {
     suspend fun getSensors(): List<SensorInfoDto>
 }

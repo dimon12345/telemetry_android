@@ -32,6 +32,7 @@ class DataStoreSettingsRepository @Inject constructor(
             it[preferenceKey] = preferenceValue
         }
     }
+
     private suspend fun getStringPreference(
         preferenceKey: Key<String>,
         preferenceDefaultValue: String = ""
