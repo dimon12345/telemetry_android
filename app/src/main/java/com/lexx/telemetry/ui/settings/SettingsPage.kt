@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lexx.telemetry.viewmodels.SettingsViewModel
+import com.lexx.presentation.ui.settings.SettingsViewModel
 
 @Composable
 fun SettingsPage(

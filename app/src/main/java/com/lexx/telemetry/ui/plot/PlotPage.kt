@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lexx.domain.models.PlotInfo
-import com.lexx.telemetry.viewmodels.PlotViewModel
+import com.lexx.presentation.ui.plot.PlotViewModel
 
 @Composable
 fun PlotPage (

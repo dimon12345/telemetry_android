@@ -1,4 +1,4 @@
-package com.lexx.telemetry.ui
+package com.lexx.presentation.models
 
 import com.lexx.presentation.navigation.NavigationAppContentType
 

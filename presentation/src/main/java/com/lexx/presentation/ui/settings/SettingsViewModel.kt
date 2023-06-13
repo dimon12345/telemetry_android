@@ -1,4 +1,4 @@
-package com.lexx.telemetry.viewmodels
+package com.lexx.presentation.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

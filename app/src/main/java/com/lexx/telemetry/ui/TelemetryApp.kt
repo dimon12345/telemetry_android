@@ -6,7 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lexx.presentation.navigation.TelemetryAppNavigationType
-import com.lexx.telemetry.viewmodels.TelemetryAppViewModel
+import com.lexx.presentation.ui.TelemetryAppViewModel
 
 @Composable
 fun TelemetryApp(
