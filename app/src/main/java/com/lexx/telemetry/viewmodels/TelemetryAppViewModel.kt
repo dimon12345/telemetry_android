@@ -2,8 +2,8 @@ package com.lexx.telemetry.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lexx.presentation.navigation.NavigationAppContentType
 import com.lexx.telemetry.ui.TelemetryAppUiState
-import com.lexx.telemetry.ui.navigation.NavigationAppContentType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

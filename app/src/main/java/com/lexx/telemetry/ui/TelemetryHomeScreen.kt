@@ -15,11 +15,10 @@ import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import com.lexx.presentation.navigation.NavigationAppContentType
+import com.lexx.presentation.navigation.TelemetryAppNavigationType
 import com.lexx.telemetry.R
-import com.lexx.telemetry.ui.navigation.NavigationAppContentType
-import com.lexx.telemetry.ui.navigation.TelemetryAppNavigationType
 import com.lexx.telemetry.ui.plot.PlotPage
 import com.lexx.telemetry.ui.sensors.SensorsPage
 import com.lexx.telemetry.ui.settings.SettingsPage

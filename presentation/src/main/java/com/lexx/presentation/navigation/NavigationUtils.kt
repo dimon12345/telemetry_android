@@ -1,4 +1,4 @@
-package com.lexx.telemetry.ui.navigation
+package com.lexx.presentation.navigation
 
 enum class TelemetryAppNavigationType {
     BOTTOM_NAVIGATION, NAVIGATION_RAIL
