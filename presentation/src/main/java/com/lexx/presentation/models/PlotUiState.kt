@@ -1,4 +1,4 @@
-package com.lexx.telemetry.ui.plot
+package com.lexx.presentation.models
 
 import com.lexx.domain.models.PlotInfo
 

@@ -1,4 +1,4 @@
-package com.lexx.telemetry.ui.sensors
+package com.lexx.presentation.models
 
 import com.lexx.domain.models.SensorInfo
 
