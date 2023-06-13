@@ -1,7 +1,5 @@
-suggestions
-version lib move to ext
+provide data formatter
 1 hour request flow
-
 
 backlog (not mvp)
 =================
