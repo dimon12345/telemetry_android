@@ -1,6 +1,7 @@
 sensor list flow, current value, last seen
-1 min flow
-1 hour flow
+return Result. show network error
+run offline
+60 min flow
 
 backlog (not mvp)
 =================
