@@ -24,12 +24,14 @@ class WebServiceDataMapper @Inject constructor(
         return with(sensorInfoDto) {
             SensorInfo(
                 nameId = nameId,
-                name = name
+                name = name,
+                lastValue = lastValue,
+                lastTimestamp = mapStringTimeToLong(lastTimestamp)
             )
         }
     }
 
-    private fun mapLocalTimeDateToLong(ts: String) : Long {
+    private fun mapStringTimeToLong(ts: String) : Long {
         return LocalDateTime.parse(ts.split(".")[0], dateTimeFormatter).toEpochSecond(ZoneOffset.UTC)
     }
 
@@ -41,14 +43,14 @@ class WebServiceDataMapper @Inject constructor(
         val points: MutableMap<Int, MutableList<PlotData>> = mutableMapOf()
         var minValue = Float.MAX_VALUE
         var maxValue = Float.MIN_VALUE
-        var minTimestamp = mapLocalTimeDateToLong(sensorsData[0].timestamp)
+        var minTimestamp = mapStringTimeToLong(sensorsData[0].timestamp)
         var maxTimestamp = minTimestamp
 
         for (data in sensorsData) {
             if (data.nameId !in points) {
                 points[data.nameId] = mutableListOf()
             }
-            val ts = mapLocalTimeDateToLong(data.timestamp)
+            val ts = mapStringTimeToLong(data.timestamp)
             points[data.nameId]?.add(PlotData(data.value, ts))
 
             if (maxValue < data.value) {
