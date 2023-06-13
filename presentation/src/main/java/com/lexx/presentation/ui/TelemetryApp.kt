@@ -1,4 +1,4 @@
-package com.lexx.telemetry.ui
+package com.lexx.presentation.ui
 
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -6,8 +6,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lexx.presentation.navigation.TelemetryAppNavigationType
-import com.lexx.presentation.ui.TelemetryAppViewModel
-import com.lexx.presentation.ui.TelemetryHomeScreen
 
 @Composable
 fun TelemetryApp(
