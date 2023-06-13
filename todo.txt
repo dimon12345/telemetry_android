@@ -1,7 +1,6 @@
-provide data formatter
+sensor list flow, current value, last seen
 1 min flow
 1 hour flow
-sensor list flow
 
 backlog (not mvp)
 =================

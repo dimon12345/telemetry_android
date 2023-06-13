@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.time.format.DateTimeFormatter
 import javax.inject.Singleton
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
@@ -21,4 +22,11 @@ object LocalModule {
     fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
         return context.dataStore
     }
+
+    @Provides
+    @Singleton
+    fun provideDataFormatter(): DateTimeFormatter {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    }
+
 }

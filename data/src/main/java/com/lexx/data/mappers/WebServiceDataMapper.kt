@@ -11,9 +11,9 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-class WebServiceDataMapper @Inject constructor() {
-    private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-
+class WebServiceDataMapper @Inject constructor(
+    private val dateTimeFormatter: DateTimeFormatter
+) {
     fun mapSensors(sensorsInfoDto: List<SensorInfoDto>): List<SensorInfo> {
         return sensorsInfoDto.map {
             mapSensor(sensorInfoDto = it)
@@ -29,8 +29,8 @@ class WebServiceDataMapper @Inject constructor() {
         }
     }
 
-    private fun convertTimestamp(ts: String) : LocalDateTime {
-        return LocalDateTime.parse(ts.split(".")[0], dateFormatter)
+    private fun mapLocalTimeDateToLong(ts: String) : Long {
+        return LocalDateTime.parse(ts.split(".")[0], dateTimeFormatter).toEpochSecond(ZoneOffset.UTC)
     }
 
     fun mapPlotInfo(sensorsData: List<SensorDataDto>): PlotInfo {
@@ -41,14 +41,14 @@ class WebServiceDataMapper @Inject constructor() {
         val points: MutableMap<Int, MutableList<PlotData>> = mutableMapOf()
         var minValue = Float.MAX_VALUE
         var maxValue = Float.MIN_VALUE
-        var minTimestamp = convertTimestamp(sensorsData[0].timestamp).toEpochSecond(ZoneOffset.UTC)
+        var minTimestamp = mapLocalTimeDateToLong(sensorsData[0].timestamp)
         var maxTimestamp = minTimestamp
 
         for (data in sensorsData) {
             if (data.nameId !in points) {
                 points[data.nameId] = mutableListOf()
             }
-            val ts = convertTimestamp(data.timestamp).toEpochSecond(ZoneOffset.UTC)
+            val ts = mapLocalTimeDateToLong(data.timestamp)
             points[data.nameId]?.add(PlotData(data.value, ts))
 
             if (maxValue < data.value) {
