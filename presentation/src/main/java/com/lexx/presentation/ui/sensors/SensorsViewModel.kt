@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,8 +25,10 @@ class SensorsViewModel @Inject constructor(
 
     fun observeSensorsInfo() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(errorText = "")
-            _uiState.value = _uiState.value.copy(sensors = getSensorsInfoUseCase())
+            getSensorsInfoUseCase().collect{
+                _uiState.value = _uiState.value.copy(errorText = "")
+                _uiState.value = _uiState.value.copy(sensors = it)
+            }
         }
     }
 }
