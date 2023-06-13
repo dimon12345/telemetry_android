@@ -25,14 +25,20 @@ class WebServiceDataMapper @Inject constructor(
             SensorInfo(
                 nameId = nameId,
                 name = name,
-                lastValue = lastValue,
-                lastTimestamp = mapStringTimeToLong(lastTimestamp)
+                lastValue = lastValue.toString(),
+                lastTimestamp = stripDtoTimestampString(lastTimestamp)
             )
         }
     }
 
+    private fun stripDtoTimestampString(ts: String): String {
+        return ts.split(".")[0]
+    }
+
     private fun mapStringTimeToLong(ts: String) : Long {
-        return LocalDateTime.parse(ts.split(".")[0], dateTimeFormatter).toEpochSecond(ZoneOffset.UTC)
+        return LocalDateTime
+            .parse(stripDtoTimestampString(ts), dateTimeFormatter)
+            .toEpochSecond(ZoneOffset.UTC)
     }
 
     fun mapPlotInfo(sensorsData: List<SensorDataDto>): PlotInfo {

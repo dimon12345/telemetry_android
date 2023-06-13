@@ -1,13 +1,13 @@
-sensor list flow, current value, last seen
-return Result. show network error
-run offline
-60 min flow
+random color
+fix sensors backend
+show network error (Result)
+add mock data
 
 backlog (not mvp)
 =================
+* 60 min flow
 * line color
 * time offset
 * add network name
-* save names to roomdb
 * add local names map and "enabled" flags
-* support android studio preview ??
+* support android studio @Preview ??
