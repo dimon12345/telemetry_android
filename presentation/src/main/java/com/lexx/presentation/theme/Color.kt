@@ -1,4 +1,4 @@
-package com.lexx.telemetry.ui.theme
+package com.lexx.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.lexx.telemetry
+package com.lexx.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,8 +9,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.Modifier
+import com.lexx.presentation.theme.TelemetryTheme
 import com.lexx.presentation.ui.TelemetryApp
-import com.lexx.telemetry.ui.theme.TelemetryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
