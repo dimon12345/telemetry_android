@@ -1,4 +1,4 @@
-package com.lexx.telemetry.ui.sensors
+package com.lexx.presentation.ui.sensors
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,8 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lexx.telemetry.R
-import com.lexx.presentation.ui.sensors.SensorsViewModel
+import com.lexx.presentation.R
 
 @Composable
 fun SensorsPage (

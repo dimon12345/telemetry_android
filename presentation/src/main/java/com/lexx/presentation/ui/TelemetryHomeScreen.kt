@@ -1,4 +1,4 @@
-package com.lexx.telemetry.ui
+package com.lexx.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -15,13 +15,13 @@ import androidx.compose.material3.NavigationRailItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import com.lexx.presentation.R
 import com.lexx.presentation.models.TelemetryAppUiState
 import com.lexx.presentation.navigation.NavigationAppContentType
 import com.lexx.presentation.navigation.TelemetryAppNavigationType
-import com.lexx.telemetry.R
+import com.lexx.presentation.ui.sensors.SensorsPage
+import com.lexx.presentation.ui.settings.SettingsPage
 import com.lexx.telemetry.ui.plot.PlotPage
-import com.lexx.telemetry.ui.sensors.SensorsPage
-import com.lexx.telemetry.ui.settings.SettingsPage
 
 @Composable
 fun TelemetryHomeScreen(

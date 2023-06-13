@@ -1,4 +1,4 @@
-package com.lexx.telemetry.ui.settings
+package com.lexx.presentation.ui.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

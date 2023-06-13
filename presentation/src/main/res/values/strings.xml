@@ -1,0 +1,4 @@
+<resources>
+    <!--string name="app_name">Telemetry</string-->
+    <string name="reload_title">reload</string>
+</resources>

@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lexx.presentation.navigation.TelemetryAppNavigationType
 import com.lexx.presentation.ui.TelemetryAppViewModel
+import com.lexx.presentation.ui.TelemetryHomeScreen
 
 @Composable
 fun TelemetryApp(
