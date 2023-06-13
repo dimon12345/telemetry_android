@@ -1,5 +1,7 @@
 provide data formatter
-1 hour request flow
+1 min flow
+1 hour flow
+sensor list flow
 
 backlog (not mvp)
 =================
