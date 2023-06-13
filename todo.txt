@@ -5,6 +5,8 @@ run offline
 
 backlog (not mvp)
 =================
+* line color
+* time offset
 * add network name
 * save names to roomdb
 * add local names map and "enabled" flags
