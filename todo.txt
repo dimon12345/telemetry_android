@@ -1,10 +1,11 @@
 show network error (Result)
 fix sensors backend
 sleep with activity
-add mock data
 
 backlog (not mvp)
 =================
+* add mock data
+* add tests
 * 60 min flow
 * line color
 * time offset
