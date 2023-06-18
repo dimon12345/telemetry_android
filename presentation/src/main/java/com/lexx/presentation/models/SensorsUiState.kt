@@ -4,5 +4,5 @@ import com.lexx.domain.models.SensorInfo
 
 data class SensorsUiState(
     val sensors: List<SensorInfo> = listOf(),
-    val errorText: String = ""
+    val connectionError: Boolean = false
 )

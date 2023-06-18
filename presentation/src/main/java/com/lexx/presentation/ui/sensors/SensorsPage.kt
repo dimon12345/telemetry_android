@@ -28,33 +28,25 @@ fun SensorsPage (
 ) {
     val uiState = sensorsViewModel.uiState.collectAsState().value
     LazyColumn(modifier.fillMaxWidth()) {
-        if (uiState.errorText.isNotEmpty()) {
+        if (uiState.connectionError) {
             item {
                 Row(Modifier
                     .fillMaxWidth()
                 ) {
                     Text(
-                        text = uiState.errorText,
+                        text = stringResource(id = R.string.server_connect_error),
                         color = Color.Red,
                         modifier = Modifier.weight(1.0f)
                     )
-                    Button(
-                        onClick = {
-                            sensorsViewModel.observeSensorsInfo()
-                        }
-
-                    ) {
-                        Text(stringResource(id = R.string.reload_title))
-                    }
                 }
-
             }
-        }
-        items(
-            items = uiState.sensors,
-            key = {it.nameId}
-        ) {sensorInfo ->
-            SensorCard(sensorInfo, Modifier)
+        } else {
+            items(
+                items = uiState.sensors,
+                key = { it.nameId }
+            ) { sensorInfo ->
+                SensorCard(sensorInfo, Modifier)
+            }
         }
     }
 }
