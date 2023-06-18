@@ -1,6 +1,5 @@
-random color
-fix sensors backend
 show network error (Result)
+fix sensors backend
 add mock data
 
 backlog (not mvp)

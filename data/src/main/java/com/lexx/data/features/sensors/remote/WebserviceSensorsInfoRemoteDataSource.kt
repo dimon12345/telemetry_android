@@ -14,15 +14,11 @@ class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
     private val BASE_URL : String
 ) : SensorsInfoRemoteDataSource {
 
-    override val sensorsInfo: Flow<List<SensorInfoDto>> = flow {
+    override val sensorsInfo: Flow<Result<List<SensorInfoDto>>> = flow {
         while(true) {
             val sensorsInfo = telemetryApiService.getSensorsInfo(("$BASE_URL/sensors"))
-            emit(sensorsInfo)
+            emit(Result.success(sensorsInfo))
             delay(SENSORS_SECONDS_REFRESH_PERIOD * 1000L)
         }
-    }
-
-    override suspend fun getSensors(): List<SensorInfoDto> {
-        return telemetryApiService.getSensorsInfo(("$BASE_URL/sensors"))
     }
 }

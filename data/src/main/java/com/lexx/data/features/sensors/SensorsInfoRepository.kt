@@ -4,29 +4,23 @@ import com.lexx.data.api.telemetry.models.SensorInfoDto
 import com.lexx.data.mappers.WebServiceDataMapper
 import com.lexx.domain.features.sensors.SensorsRepository
 import com.lexx.domain.models.SensorInfo
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SensorsInfoRepository @Inject constructor(
     private val sensorsInfoRemoteDataSource: SensorsInfoRemoteDataSource,
     private val mapper: WebServiceDataMapper,
 ) : SensorsRepository {
-    override suspend fun getSensorsInfo(): Flow<List<SensorInfo>> {
-        val result = withContext(Dispatchers.Default) {
-            sensorsInfoRemoteDataSource
-                .sensorsInfo.map {
-                    mapper.mapSensors(it)
-                }
+    override fun getSensorsInfo(): Flow<Result<List<SensorInfo>>> {
+        return sensorsInfoRemoteDataSource.sensorsInfo.map {
+            it.map {
+                mapper.mapSensors(it)
+            }
         }
-
-        return result
     }
 }
 
 interface SensorsInfoRemoteDataSource {
-    val sensorsInfo: Flow<List<SensorInfoDto>>
-    suspend fun getSensors(): List<SensorInfoDto>
+    val sensorsInfo: Flow<Result<List<SensorInfoDto>>>
 }
