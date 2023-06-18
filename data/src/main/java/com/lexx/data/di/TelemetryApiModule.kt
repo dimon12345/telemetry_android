@@ -1,5 +1,6 @@
 package com.lexx.data.di
 
+import com.lexx.data.BuildConfig
 import com.lexx.data.api.telemetry.TelemetryApiService
 import dagger.Module
 import dagger.Provides
@@ -14,7 +15,7 @@ import javax.inject.Singleton
 object TelemetryApiModule {
 
     @Provides
-    fun providesBaseUrl() : String = "http://192.168.0.166:8080"
+    fun providesBaseUrl() : String = BuildConfig.DEFAULT_BASE_URL
 
     @Provides
     @Singleton
