@@ -1,5 +1,6 @@
 show network error (Result)
 fix sensors backend
+sleep with activity
 add mock data
 
 backlog (not mvp)
