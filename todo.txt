@@ -1,4 +1,5 @@
 fix sensors backend
+fix BASE_URL providing
 show network error (Result)
 sleep with activity
 
