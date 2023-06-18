@@ -31,18 +31,18 @@ fun TelemetryHomeScreen(
     modifier: Modifier = Modifier
 ) {
     val navigationItemContentList = listOf(
-        NavigationItemContent(
-            navigationAppContentType = NavigationAppContentType.PLOT_CONTENT_TYPE,
-            icon = R.drawable.twotone_stacked_line_chart_24
-        ),
+//        NavigationItemContent(
+//            navigationAppContentType = NavigationAppContentType.PLOT_CONTENT_TYPE,
+//            icon = R.drawable.twotone_stacked_line_chart_24
+//        ),
         NavigationItemContent(
             navigationAppContentType = NavigationAppContentType.SENSORS_CONTENT_TYPE,
             icon = R.drawable.twotone_sensors_24
         ),
-        NavigationItemContent(
-            navigationAppContentType = NavigationAppContentType.SETTINGS_CONTENT_TYPE,
-            icon = R.drawable.twotone_settings_24
-        )
+//        NavigationItemContent(
+//            navigationAppContentType = NavigationAppContentType.SETTINGS_CONTENT_TYPE,
+//            icon = R.drawable.twotone_settings_24
+//        )
     )
 
     TelemetryAppContent(

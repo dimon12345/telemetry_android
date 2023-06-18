@@ -1,7 +1,6 @@
-fix sensors backend
-fix BASE_URL providing
 show network error (Result)
-sleep with activity
+BASE_URL providing from UserProperties
+sleep onPause()
 
 backlog (not mvp)
 =================
