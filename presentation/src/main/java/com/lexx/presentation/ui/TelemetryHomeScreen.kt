@@ -39,10 +39,10 @@ fun TelemetryHomeScreen(
             navigationAppContentType = NavigationAppContentType.SENSORS_CONTENT_TYPE,
             icon = R.drawable.twotone_sensors_24
         ),
-//        NavigationItemContent(
-//            navigationAppContentType = NavigationAppContentType.SETTINGS_CONTENT_TYPE,
-//            icon = R.drawable.twotone_settings_24
-//        )
+        NavigationItemContent(
+            navigationAppContentType = NavigationAppContentType.SETTINGS_CONTENT_TYPE,
+            icon = R.drawable.twotone_settings_24
+        )
     )
 
     TelemetryAppContent(
