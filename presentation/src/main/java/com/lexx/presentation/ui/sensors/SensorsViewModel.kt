@@ -28,7 +28,6 @@ class SensorsViewModel @Inject constructor(
         viewModelScope.launch {
             getSensorsInfoUseCase().collect{ result ->
                 if (result.isSuccess) {
-//                    _uiState.value = _uiState.value.copy()
                     _uiState.value = _uiState.value.copy(
                         connectionError = false,
                         sensors = result.getOrDefault(listOf())

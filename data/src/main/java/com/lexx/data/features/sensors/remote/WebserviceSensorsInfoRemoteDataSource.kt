@@ -22,6 +22,7 @@ class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
                 emit(Result.success(sensorsInfo))
             } catch (e: ConnectException) {
                 emit(Result.failure(e))
+            }
             delay(SENSORS_SECONDS_REFRESH_PERIOD * 1000L)
         }
     }

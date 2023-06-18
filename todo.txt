@@ -1,13 +1,17 @@
+MPV
+===
 BASE_URL providing from UserProperties
 sleep onPause()
 
-backlog (not mvp)
-=================
+
+Backlog
+=======
 * add mock data
-* add tests
-* 60 min flow
-* line color
-* time offset
-* add network name
-* add local names map and "enabled" flags
 * support android studio @Preview ??
+* add tests
+* enable/disable sensor, line color
+* add sensor local alias
+* add title
+* 60 minutes flow
+* 6 hours flow
+* 1 day flow
