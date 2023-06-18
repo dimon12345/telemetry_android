@@ -1,5 +1,5 @@
-show network error (Result)
 fix sensors backend
+show network error (Result)
 sleep with activity
 
 backlog (not mvp)
