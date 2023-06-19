@@ -8,10 +8,7 @@ import javax.inject.Inject
 
 class WebServicePlotInfoRemoteDataSource @Inject constructor(
     private val telemetryApiService: TelemetryApiService,
-    private val settingsRepository: SettingsRepository,
 ) : PlotInfoRemoteDataSource {
-    override suspend fun getSensorsData(): List<SensorDataDto> {
-        val serverAddress: String = settingsRepository.getServerAddress()
-        return telemetryApiService.getSensorsData("http://$serverAddress/data")
-    }
+    override suspend fun getSensorsData(): List<SensorDataDto> =
+        telemetryApiService.getSensorsData()
 }

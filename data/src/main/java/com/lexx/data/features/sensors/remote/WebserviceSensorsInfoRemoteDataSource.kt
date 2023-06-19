@@ -12,13 +12,12 @@ import javax.inject.Inject
 
 class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
     private val telemetryApiService: TelemetryApiService,
-    private val BASE_URL : String
 ) : SensorsInfoRemoteDataSource {
 
     override val sensorsInfo: Flow<Result<List<SensorInfoDto>>> = flow {
         while(true) {
             try {
-                val sensorsInfo = telemetryApiService.getSensorsInfo(("$BASE_URL/sensors"))
+                val sensorsInfo = telemetryApiService.getSensorsInfo()
                 emit(Result.success(sensorsInfo))
             } catch (e: ConnectException) {
                 emit(Result.failure(e))

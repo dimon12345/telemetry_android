@@ -16,7 +16,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
-        buildConfigField "String", "DEFAULT_BASE_URL", "\"http://192.168.0.123:8080\""
+        buildConfigField "String", "DEFAULT_BASE_URL", "\"192.168.0.1:8080\""
     }
 
     buildTypes {
