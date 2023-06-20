@@ -1,10 +1,11 @@
 * Timber
-* add mock data
-* support android studio @Preview ??
-* add tests
-* enable/disable sensor, line color
-* add sensor local alias
-* add title
+* enable/disable sensor, line color, name
 * 60 minutes flow
 * 6 hours flow
 * 1 day flow
+
+Backlog
+=======
+* add tests
+* add mock data
+* support android studio @Preview ??
