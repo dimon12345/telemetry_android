@@ -10,11 +10,12 @@ import com.lexx.presentation.navigation.TelemetryAppNavigationType
 @Composable
 fun TelemetryApp(
     windowSize: WindowWidthSizeClass,
+    viewModel: TelemetryAppViewModel,
     modifier: Modifier = Modifier
 ) {
     val navigationType: TelemetryAppNavigationType
 
-    val viewModel: TelemetryAppViewModel = viewModel()
+
     val telemetryAppUiState = viewModel.uiState.collectAsState().value
 
     when (windowSize) {

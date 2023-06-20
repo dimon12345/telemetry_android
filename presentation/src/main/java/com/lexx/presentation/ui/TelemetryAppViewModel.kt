@@ -2,6 +2,7 @@ package com.lexx.presentation.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lexx.domain.features.sensors.SensorsRepository
 import com.lexx.presentation.models.TelemetryAppUiState
 import com.lexx.presentation.navigation.NavigationAppContentType
 import com.lexx.presentation.navigation.NavigationAppContentType.SENSORS_CONTENT_TYPE
@@ -13,7 +14,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TelemetryAppViewModel @Inject constructor() : ViewModel() {
+class TelemetryAppViewModel @Inject constructor(
+    private val sensorsRepository: SensorsRepository,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(
         TelemetryAppUiState("Noname", SENSORS_CONTENT_TYPE)
     )
@@ -24,5 +27,13 @@ class TelemetryAppViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(currentTelemetryAppContent = navigationAppContentType)
         }
+    }
+
+    fun onPause() {
+        sensorsRepository.pauseNetworkPolling()
+    }
+
+    fun onResume() {
+        sensorsRepository.resumeNetworkPolling()
     }
 }

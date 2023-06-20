@@ -1,12 +1,4 @@
-MPV
-===
-BASE_URL providing from UserProperties
-server address as flow
-sleep onPause()
-
-
-Backlog
-=======
+* Timber
 * add mock data
 * support android studio @Preview ??
 * add tests

@@ -14,13 +14,24 @@ class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
     private val telemetryApiService: TelemetryApiService,
 ) : SensorsInfoRemoteDataSource {
 
+    private var paused = false
+    override fun pauseNetworkPolling() {
+        paused = true
+    }
+
+    override fun resumeNetworkPolling() {
+        paused = false
+    }
+
     override val sensorsInfo: Flow<Result<List<SensorInfoDto>>> = flow {
         while(true) {
-            try {
-                val sensorsInfo = telemetryApiService.getSensorsInfo()
-                emit(Result.success(sensorsInfo))
-            } catch (e: ConnectException) {
-                emit(Result.failure(e))
+            if (!paused) {
+                try {
+                    val sensorsInfo = telemetryApiService.getSensorsInfo()
+                    emit(Result.success(sensorsInfo))
+                } catch (e: ConnectException) {
+                    emit(Result.failure(e))
+                }
             }
             delay(SENSORS_SECONDS_REFRESH_PERIOD * 1000L)
         }
