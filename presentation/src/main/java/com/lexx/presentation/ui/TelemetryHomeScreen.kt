@@ -167,7 +167,6 @@ private fun TelemetryAppBottomNavigationBar(
     }
 }
 
-
 private data class NavigationItemContent (
     val navigationAppContentType: NavigationAppContentType,
     val icon: Int,

@@ -1,8 +1,8 @@
 * Timber
-* enable/disable sensor, line color, name
 * 60 minutes flow
 * 6 hours flow
 * 1 day flow
+* enable/disable sensor, line color, name
 
 Backlog
 =======
