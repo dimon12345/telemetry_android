@@ -1,11 +1,11 @@
-* Timber
-* 60 minutes flow
-* 6 hours flow
-* 1 day flow
-* enable/disable sensor, line color, name
++ 60 minutes flow
++ 6 hours flow
++ 1 day flow
++ enable/disable sensor, line color, name
 
 Backlog
 =======
-* add tests
-* add mock data
+* Timber
+* tests
+* mock data
 * support android studio @Preview ??
