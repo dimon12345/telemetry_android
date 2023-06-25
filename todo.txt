@@ -1,4 +1,6 @@
-+ 60 minutes flow
++ Plot. handle network error
++ Plot data over Flow
+
 + 6 hours flow
 + 1 day flow
 + enable/disable sensor, line color, name
