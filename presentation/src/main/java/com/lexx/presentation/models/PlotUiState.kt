@@ -6,4 +6,5 @@ data class PlotUiState (
     val plotInfo: PlotInfo = PlotInfo(),
     val xAxisLabels: List<String> = listOf(),
     val yAxisLabels: List<String> = listOf(),
+    val connectionError: Boolean = false,
 )

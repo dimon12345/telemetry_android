@@ -3,7 +3,7 @@ package com.lexx.data.features.sensors.remote
 import com.lexx.data.api.telemetry.TelemetryApiService
 import com.lexx.data.api.telemetry.models.SensorInfoDto
 import com.lexx.data.features.sensors.SensorsInfoRemoteDataSource
-import com.lexx.domain.models.SENSORS_SECONDS_REFRESH_PERIOD
+import com.lexx.domain.SENSORS_SECONDS_REFRESH_PERIOD
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
