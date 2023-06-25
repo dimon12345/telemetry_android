@@ -120,7 +120,7 @@ fun TelemetryPlot(
                     for (i in plotLine.values.indices) {
                         val x2 =
                             size.width * (plotPoints[i].timestamp - minTimestamp).toFloat() / timestampRange.toFloat()
-                        val y2 = size.height * (plotPoints[i].value - minValue) / valueRange
+                        val y2 = size.height * (1 - (plotPoints[i].value - minValue) / valueRange)
                         coordinates2.add(PointF(x2, y2))
                     }
 
