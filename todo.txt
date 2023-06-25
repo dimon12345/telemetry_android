@@ -1,5 +1,6 @@
 + Plot. handle network error
 + Plot data over Flow
++ Plot labels
 
 + 6 hours flow
 + 1 day flow
