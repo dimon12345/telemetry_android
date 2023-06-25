@@ -8,6 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.net.ConnectException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
@@ -29,6 +30,8 @@ class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
                 try {
                     val sensorsInfo = telemetryApiService.getSensorsInfo()
                     emit(Result.success(sensorsInfo))
+                } catch (e: UnknownHostException) {
+                    emit(Result.failure(e))
                 } catch (e: ConnectException) {
                     emit(Result.failure(e))
                 }
