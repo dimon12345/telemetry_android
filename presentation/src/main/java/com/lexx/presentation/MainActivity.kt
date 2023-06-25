@@ -14,6 +14,7 @@ import com.lexx.presentation.theme.TelemetryTheme
 import com.lexx.presentation.ui.TelemetryApp
 import com.lexx.presentation.ui.TelemetryAppViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
@@ -21,6 +22,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel: TelemetryAppViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.plant(Timber.DebugTree())
         setContent {
             TelemetryTheme {
                 Surface(

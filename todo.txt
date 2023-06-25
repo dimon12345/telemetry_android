@@ -1,11 +1,11 @@
-+ Plot Data over Flow
-+ Plot. Handle network error. Timber
 + Plot. Labels
++ Plot. Inject values formatter
 + Plot. 6 hours and 1 day periods
 + Sensors. Enable/disable sensor, line color, name
 
 Backlog
 =======
+* Timber
 * Tests
 * Mock data
 * Support android studio @Preview ??

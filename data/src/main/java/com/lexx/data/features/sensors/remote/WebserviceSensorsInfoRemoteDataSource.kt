@@ -7,6 +7,8 @@ import com.lexx.domain.SENSORS_SECONDS_REFRESH_PERIOD
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import timber.log.Timber
+import java.lang.Exception
 import java.net.ConnectException
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -34,6 +36,9 @@ class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
                     emit(Result.failure(e))
                 } catch (e: ConnectException) {
                     emit(Result.failure(e))
+                } catch (e: Exception) {
+                    Timber.d("Get remote SensorInfo exception: $e")
+                    throw e
                 }
             }
             delay(SENSORS_SECONDS_REFRESH_PERIOD * 1000L)

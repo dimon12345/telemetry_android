@@ -4,6 +4,7 @@ import android.graphics.Paint
 import android.graphics.PointF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -27,6 +29,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lexx.domain.models.PlotInfo
 import com.lexx.presentation.R
 import com.lexx.presentation.ui.plot.PlotViewModel
+import timber.log.Timber
+import java.text.DecimalFormat
 
 @Composable
 fun PlotPage (
@@ -34,18 +38,17 @@ fun PlotPage (
     modifier: Modifier = Modifier
 ) {
     val uiState = plotViewModel.uiState.collectAsState().value
-    val yStep = 50
-    val points = listOf(150f,100f,250f,200f,330f,300f,90f,120f,285f,199f)
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(Color.DarkGray)
     ) {
         if (uiState.connectionError) {
-            Row(Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(Color.White)
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(Color.White)
             ) {
                 Text(
                     text = stringResource(id = R.string.server_connect_error),
@@ -58,12 +61,10 @@ fun PlotPage (
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(),
-                xValues = (0..9).map { it + 1 },
-                yValues = (0..6).map { (it + 1) * yStep },
-                points = points,
+                xValues = uiState.xValues,
+                yValues = uiState.yValues,
                 plotInfo = uiState.plotInfo,
-                paddingSpace = 16.dp,
-                verticalStep = yStep
+                paddingSpace = dimensionResource(id = R.dimen.plot_padding_space),
             )
         }
     }
@@ -72,59 +73,62 @@ fun PlotPage (
 @Composable
 fun TelemetryPlot(
     modifier : Modifier,
-    xValues: List<Int>,
-    yValues: List<Int>,
-    points: List<Float>,
+    xValues: List<String>,
+    yValues: List<String>,
     plotInfo: PlotInfo,
     paddingSpace: Dp,
-    verticalStep: Int
 ) {
-    val coordinates = mutableListOf<PointF>()
+    val canvasXPadding = dimensionResource(id = R.dimen.plot_x_padding).value
+    val canvasYPadding = dimensionResource(id = R.dimen.plot_y_padding).value
+    val yTextWidth = dimensionResource(id = R.dimen.plot_y_text_width)
+    val labelSize = dimensionResource(id = R.dimen.plot_text_size)
 
     val density = LocalDensity.current
     val textPaint = remember(density) {
         Paint().apply {
             color = android.graphics.Color.BLACK
             textAlign = Paint.Align.CENTER
-            textSize = density.run { 12.sp.toPx() }
+            textSize = density.run { labelSize.toPx() }
         }
     }
 
     Box(
         modifier = modifier
             .background(Color.White)
-            .padding(horizontal = 8.dp, vertical = 12.dp),
+            .padding(
+                horizontal = dimensionResource(id = R.dimen.canvas_horizontal_padding),
+                vertical = dimensionResource(id = R.dimen.canvas_vertical_padding)
+            ),
         contentAlignment = Center
     ) {
         Canvas(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                //.border(1.dp, Color.Black)
         ) {
             if (xValues.size > 0) {
-                val xAxisSpace = (size.width - paddingSpace.toPx()) / xValues.size
-                val yAxisSpace = size.height / yValues.size
+                val canvasSpaceWidth = size.width - canvasXPadding - paddingSpace.toPx() - yTextWidth.toPx()
+                val canvasSpaceHeight = size.height - canvasYPadding - paddingSpace.toPx()
+
+                val xAxisSpace = (canvasSpaceWidth - paddingSpace.toPx()) / xValues.size
+                val yAxisSpace = canvasSpaceHeight / yValues.size
                 /** placing x axis points */
-                for (i in xValues.indices) {
-                    drawContext.canvas.nativeCanvas.drawText(
-                        "${xValues[i]}",
-                        xAxisSpace * (i + 1),
-                        size.height - 30,
-                        textPaint
-                    )
-                }
+//                for (i in xValues.indices) {
+//                    drawContext.canvas.nativeCanvas.drawText(
+//                        "${xValues[i]}",
+//                        xAxisSpace * (i + 1),
+//                        canvasSpaceHeight - 30,
+//                        textPaint
+//                    )
+//                }
 
                 for (i in yValues.indices) {
                     drawContext.canvas.nativeCanvas.drawText(
-                        "${yValues[i]}",
-                        paddingSpace.toPx() / 2f,
-                        size.height - yAxisSpace * (i + 1),
+                        yValues[i],
+                        paddingSpace.toPx()/2 + canvasXPadding + yTextWidth.toPx() / 2,
+                        canvasSpaceHeight - yAxisSpace * (i + 1) + canvasYPadding + labelSize.toPx(),
                         textPaint
                     )
-                }
-
-                for (i in points.indices) {
-                    val x1 = xAxisSpace * xValues[i]
-                    val y1 = size.height - (yAxisSpace * (points[i] / verticalStep.toFloat()))
-                    coordinates.add(PointF(x1, y1))
                 }
 
                 if (plotInfo.values.isNotEmpty()) {
@@ -138,10 +142,11 @@ fun TelemetryPlot(
                         val coordinates2 = mutableListOf<PointF>()
                         for (i in plotLine.values.indices) {
                             val x2 =
-                                size.width * (plotPoints[i].timestamp - minTimestamp).toFloat() / timestampRange.toFloat()
+                                canvasSpaceWidth * (plotPoints[i].timestamp - minTimestamp).toFloat() / timestampRange.toFloat()
                             val y2 =
-                                size.height * (1 - (plotPoints[i].value - minValue) / valueRange)
-                            coordinates2.add(PointF(x2, y2))
+                                canvasSpaceHeight * (1 - (plotPoints[i].value - minValue) / valueRange)
+                            Timber.d("canvas123 ${x2}: ${y2}" )
+                            coordinates2.add(PointF(x2 + canvasXPadding + yTextWidth.toPx(), y2 + canvasYPadding))
                         }
 
                         if (coordinates2.isNotEmpty()) {
@@ -157,7 +162,7 @@ fun TelemetryPlot(
                                 stroke,
                                 color = Color.Black,
                                 style = Stroke(
-                                    width = 1f
+                                    width = 3f
                                 )
                             )
                         }

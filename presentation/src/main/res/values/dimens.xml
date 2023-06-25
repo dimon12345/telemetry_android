@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="canvas_horizontal_padding">8dp</dimen>
+    <dimen name="canvas_vertical_padding">12dp</dimen>
+    <dimen name="plot_x_padding">0dp</dimen>
+    <dimen name="plot_y_padding">0dp</dimen>
+    <dimen name="plot_padding_space">0dp</dimen>
+    <dimen name="plot_y_text_width">55dp</dimen>
+    <dimen name="plot_text_size">12sp</dimen>
+</resources>
