@@ -1,5 +1,6 @@
-+ Plot. Labels
++ Plot. Legenda
 + Plot. Inject values formatter
++ Presentation. UiMapper
 + Plot. 6 hours and 1 day periods
 + Sensors. Enable/disable sensor, line color, name
 
@@ -9,3 +10,4 @@ Backlog
 * Tests
 * Mock data
 * Support android studio @Preview ??
+* Config for value precigion

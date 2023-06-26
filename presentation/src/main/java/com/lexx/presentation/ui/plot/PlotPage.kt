@@ -17,8 +17,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -78,9 +80,15 @@ fun TelemetryPlot(
     plotInfo: PlotInfo,
     paddingSpace: Dp,
 ) {
-    val canvasXPadding = dimensionResource(id = R.dimen.plot_x_padding).value
-    val canvasYPadding = dimensionResource(id = R.dimen.plot_y_padding).value
+    val canvasLeftPadding = dimensionResource(id = R.dimen.plot_left_padding)
+    val canvasRightPadding = dimensionResource(id = R.dimen.plot_right_padding)
+    val canvasBottomPadding = dimensionResource(id = R.dimen.plot_bottom_padding)
+    val canvasTopPadding = dimensionResource(id = R.dimen.plot_top_padding)
+
     val yTextWidth = dimensionResource(id = R.dimen.plot_y_text_width)
+    val xTextWidth = dimensionResource(id = R.dimen.plot_x_text_width)
+    val xTextHeight = dimensionResource(id = R.dimen.plot_x_text_height)
+
     val labelSize = dimensionResource(id = R.dimen.plot_text_size)
 
     val density = LocalDensity.current
@@ -104,31 +112,32 @@ fun TelemetryPlot(
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
-                //.border(1.dp, Color.Black)
+                .border(1.dp, Color.Black)
         ) {
             if (xValues.size > 0) {
-                val canvasSpaceWidth = size.width - canvasXPadding - paddingSpace.toPx() - yTextWidth.toPx()
-                val canvasSpaceHeight = size.height - canvasYPadding - paddingSpace.toPx()
+                val canvasSpaceWidth = size.width - canvasLeftPadding.toPx() - paddingSpace.toPx() - yTextWidth.toPx() - canvasRightPadding.toPx()
+                val canvasSpaceHeight = size.height - canvasBottomPadding.toPx() - paddingSpace.toPx() - canvasTopPadding.toPx()
 
-                val xAxisSpace = (canvasSpaceWidth - paddingSpace.toPx()) / xValues.size
+                val xAxisSpace = canvasSpaceWidth / (xValues.size - 1)
                 val yAxisSpace = canvasSpaceHeight / yValues.size
-                /** placing x axis points */
-//                for (i in xValues.indices) {
-//                    drawContext.canvas.nativeCanvas.drawText(
-//                        "${xValues[i]}",
-//                        xAxisSpace * (i + 1),
-//                        canvasSpaceHeight - 30,
-//                        textPaint
-//                    )
-//                }
 
+                // x axis
+                for (i in xValues.indices) {
+                    val x = xAxisSpace * i + canvasLeftPadding.toPx() + yTextWidth.toPx() - xTextWidth.toPx()/2
+                    val y = canvasSpaceHeight + canvasTopPadding.toPx() + xTextHeight.toPx()/2
+                    with(drawContext.canvas) {
+                        save()
+                        nativeCanvas.rotate(330F, x, y )
+                        nativeCanvas.drawText(xValues[i], x, y, textPaint)
+                        restore()
+                    }
+                }
+
+                // y axis
                 for (i in yValues.indices) {
-                    drawContext.canvas.nativeCanvas.drawText(
-                        yValues[i],
-                        paddingSpace.toPx()/2 + canvasXPadding + yTextWidth.toPx() / 2,
-                        canvasSpaceHeight - yAxisSpace * (i + 1) + canvasYPadding + labelSize.toPx(),
-                        textPaint
-                    )
+                    val x = paddingSpace.toPx()/2 + canvasLeftPadding.toPx() + yTextWidth.toPx() / 2
+                    val y = canvasSpaceHeight - yAxisSpace * (i + 1) + canvasBottomPadding.toPx() + labelSize.toPx()
+                    drawContext.canvas.nativeCanvas.drawText(yValues[i], x, y, textPaint)
                 }
 
                 if (plotInfo.values.isNotEmpty()) {
@@ -145,8 +154,7 @@ fun TelemetryPlot(
                                 canvasSpaceWidth * (plotPoints[i].timestamp - minTimestamp).toFloat() / timestampRange.toFloat()
                             val y2 =
                                 canvasSpaceHeight * (1 - (plotPoints[i].value - minValue) / valueRange)
-                            Timber.d("canvas123 ${x2}: ${y2}" )
-                            coordinates2.add(PointF(x2 + canvasXPadding + yTextWidth.toPx(), y2 + canvasYPadding))
+                            coordinates2.add(PointF(x2 + canvasLeftPadding.toPx() + yTextWidth.toPx(), y2 + canvasBottomPadding.toPx()))
                         }
 
                         if (coordinates2.isNotEmpty()) {

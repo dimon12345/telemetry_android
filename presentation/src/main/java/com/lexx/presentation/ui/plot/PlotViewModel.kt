@@ -2,6 +2,7 @@ package com.lexx.presentation.ui.plot
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lexx.domain.PLOT_X_STEPS
 import com.lexx.domain.PLOT_Y_STEPS
 import com.lexx.domain.features.plot.GetPlotInfoUseCase
 import com.lexx.domain.models.PlotInfo
@@ -31,12 +32,14 @@ class PlotViewModel @Inject constructor(
                 if (result.isSuccess) {
                     val plotInfo = result.getOrDefault(PlotInfo())
                     val yStep = (plotInfo.maxValue - plotInfo.minValue) / PLOT_Y_STEPS
+                    val xStep = (plotInfo.maxTimestamp - plotInfo.minTimestamp) / PLOT_X_STEPS
                     val formatter = DecimalFormat("#.###")
                     _uiState.value = _uiState.value.copy(
                         connectionError = false,
                         plotInfo = plotInfo,
                         verticalStep = yStep,
-                        yValues = (0..PLOT_Y_STEPS).map { formatter.format(plotInfo.minValue + (it + 1) * yStep) },
+                        yValues = (0..PLOT_Y_STEPS).map { formatter.format(plotInfo.minValue + it * yStep) },
+                        xValues = (0..PLOT_X_STEPS).map { formatter.format(plotInfo.minTimestamp + it * xStep) },
                     )
                 } else {
                     _uiState.value = _uiState.value.copy(connectionError = true)
