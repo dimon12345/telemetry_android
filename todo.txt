@@ -1,8 +1,5 @@
-+ Plot. Legenda
-+ Plot. Inject values formatter
-+ Presentation. UiMapper
-+ Plot. 6 hours and 1 day periods
 + Sensors. Enable/disable sensor, line color, name
++ Plot. 6 hours and 1 day periods
 
 Backlog
 =======
