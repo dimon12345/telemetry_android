@@ -40,12 +40,14 @@ class PlotViewModel @Inject constructor(
                         val plotInfo = remoteResult.getOrDefault(PlotInfo())
                         if (plotInfo.values.isEmpty()) {
                             PlotUiInfo(noDataError = true )
-                        }
-                        val sensorsLocalInfoMap: Map<Int, SensorLocalInfo> = sensorsLocalInfo.map {
-                            it.remoteSensorId to it
-                        }.toMap()
+                        } else {
+                            val sensorsLocalInfoMap: Map<Int, SensorLocalInfo> =
+                                sensorsLocalInfo.map {
+                                    it.remoteSensorId to it
+                                }.toMap()
 
-                        uiMapper.mapPlotInfoToUi(plotInfo, sensorsLocalInfoMap)
+                            uiMapper.mapPlotInfoToUi(plotInfo, sensorsLocalInfoMap)
+                        }
                     } else {
                         PlotUiInfo(
                             noDataError = false,
