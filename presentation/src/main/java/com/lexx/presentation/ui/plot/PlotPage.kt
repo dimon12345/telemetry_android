@@ -17,22 +17,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lexx.domain.models.PlotInfo
 import com.lexx.presentation.R
+import com.lexx.presentation.models.PlotUiInfo
 import com.lexx.presentation.ui.plot.PlotViewModel
-import timber.log.Timber
-import java.text.DecimalFormat
 
 @Composable
 fun PlotPage (
@@ -80,7 +75,7 @@ fun TelemetryPlot(
     modifier : Modifier,
     xValues: List<String>,
     yValues: List<String>,
-    plotInfo: PlotInfo,
+    plotInfo: PlotUiInfo,
     paddingSpace: Dp,
 ) {
     val canvasLeftPadding = dimensionResource(id = R.dimen.plot_left_padding)
@@ -171,7 +166,7 @@ fun TelemetryPlot(
 
                             drawPath(
                                 stroke,
-                                color = Color.Black,
+                                color = plotLine.color,
                                 style = Stroke(
                                     width = 3f
                                 )

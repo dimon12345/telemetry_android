@@ -1,11 +1,10 @@
 package com.lexx.presentation.models
 
 import com.lexx.domain.PLOT_Y_STEPS
-import com.lexx.domain.models.PlotInfo
 
 private val defaultVerticalStep = 50f
 data class PlotUiState (
-    val plotInfo: PlotInfo = PlotInfo(),
+    val plotInfo: PlotUiInfo = PlotUiInfo(),
     val xAxisLabels: List<String> = listOf(),
     val yAxisLabels: List<String> = listOf(),
     val connectionError: Boolean = false,

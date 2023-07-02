@@ -3,7 +3,13 @@ package com.lexx.presentation.mapping
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.lexx.domain.features.sensors.local.SensorLocalInfo
+import com.lexx.domain.models.PlotData
+import com.lexx.domain.models.PlotInfo
+import com.lexx.domain.models.PlotLineInfo
 import com.lexx.domain.models.SensorInfo
+import com.lexx.presentation.models.PlotLineUiInfo
+import com.lexx.presentation.models.PlotUiData
+import com.lexx.presentation.models.PlotUiInfo
 import com.lexx.presentation.models.SensorUiInfo
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -61,5 +67,47 @@ class UiMapper @Inject constructor(
     private fun mapStringToColor(color: String): Color {
         val result = Color(android.graphics.Color.parseColor(color))
         return result
+    }
+
+    fun mapPlotInfoToUi(plotInfo: PlotInfo, localInfo: Map<Int, SensorLocalInfo>): PlotUiInfo {
+        val noDataError = plotInfo.values.isEmpty()
+        return PlotUiInfo(
+            values = mapLinesToUi(plotInfo.values, localInfo),
+            minValue = plotInfo.minValue,
+            maxValue = plotInfo.maxValue,
+            minTimestamp = plotInfo.minTimestamp,
+            maxTimestamp = plotInfo.maxTimestamp,
+            errorMessage = plotInfo.errorMessage,
+            noDataError = noDataError
+        )
+    }
+
+    private fun mapLinesToUi(
+        lines: List<PlotLineInfo>,
+        localInfo: Map<Int, SensorLocalInfo>
+    ): List<PlotLineUiInfo> {
+
+        return lines.map {plotInfo ->
+            val color = mapStringToColor(localInfo[plotInfo.nameId]?.color ?: "#FF000000")
+            val values = mapValuesToUi(plotInfo.values)
+            PlotLineUiInfo(
+                nameId = plotInfo.nameId,
+                values = values,
+                color = color,
+            )
+        }
+    }
+
+    private fun mapValuesToUi(values: List<PlotData>): List<PlotUiData> {
+        return values.map {
+            mapPlotDataToUi(it)
+        }
+    }
+
+    private fun mapPlotDataToUi(plotData: PlotData): PlotUiData {
+        return PlotUiData(
+            value = plotData.value,
+            timestamp = plotData.timestamp
+        )
     }
 }
