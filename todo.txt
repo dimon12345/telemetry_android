@@ -1,9 +1,10 @@
-+ Sensors. Enable/disable sensor, line color, name
-+ Plot. 6 hours and 1 day periods
++ Sensors. Enable/disable sensor, 
 
 Backlog
 =======
-* Timber
++ Plot. 6 hours and 1 day periods
++ Fix x axis labels mapper
++ Sensor. name
 * Tests
 * Mock data
 * Support android studio @Preview ??
