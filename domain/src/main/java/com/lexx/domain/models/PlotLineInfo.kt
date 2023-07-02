@@ -1,6 +1,7 @@
 package com.lexx.domain.models
 
 data class PlotLineInfo (
-    val nameId: Int = -1,
-    val values: List<PlotData>
+    val nameId: Int,
+    val values: List<PlotData>,
+    //val color: String
 )

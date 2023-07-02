@@ -43,14 +43,17 @@ fun PlotPage (
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.DarkGray)
+            .background(Color.White)
     ) {
-        if (uiState.connectionError) {
+        if (uiState.noDataError) {
+            Text(
+                text = stringResource(id = R.string.no_data_error),
+            )
+        } else if (uiState.connectionError) {
             Row(
                 Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .background(Color.White)
             ) {
                 Text(
                     text = stringResource(id = R.string.server_connect_error),

@@ -33,15 +33,20 @@ class PlotViewModel @Inject constructor(
             getPlotInfoUseCase().collect { result ->
                 if (result.isSuccess) {
                     val plotInfo = result.getOrDefault(PlotInfo())
-                    val yStep = (plotInfo.maxValue - plotInfo.minValue) / PLOT_Y_STEPS
-                    val xStep = (plotInfo.maxTimestamp - plotInfo.minTimestamp) / PLOT_X_STEPS
-                    _uiState.value = _uiState.value.copy(
-                        connectionError = false,
-                        plotInfo = plotInfo,
-                        verticalStep = yStep,
-                        yValues = (0..PLOT_Y_STEPS).map { uiMapper.mapValueToScreen(plotInfo.minValue + it * yStep) },
-                        xValues = (0..PLOT_X_STEPS).map { uiMapper.mapTimestampToScreen(plotInfo.minTimestamp + it * xStep) },
-                    )
+                    if (plotInfo.values.isEmpty()) {
+                        _uiState.value.copy(noDataError = true)
+                    } else {
+                        val yStep = (plotInfo.maxValue - plotInfo.minValue) / PLOT_Y_STEPS
+                        val xStep = (plotInfo.maxTimestamp - plotInfo.minTimestamp) / PLOT_X_STEPS
+                        _uiState.value = _uiState.value.copy(
+                            connectionError = false,
+                            noDataError = false,
+                            plotInfo = plotInfo,
+                            verticalStep = yStep,
+                            yValues = (0..PLOT_Y_STEPS).map { uiMapper.mapValueToScreen(plotInfo.minValue + it * yStep) },
+                            xValues = (0..PLOT_X_STEPS).map { uiMapper.mapTimestampToScreen(plotInfo.minTimestamp + it * xStep) },
+                        )
+                    }
                 } else {
                     _uiState.value = _uiState.value.copy(connectionError = true)
                 }

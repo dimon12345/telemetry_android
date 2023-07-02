@@ -9,6 +9,7 @@ data class PlotUiState (
     val xAxisLabels: List<String> = listOf(),
     val yAxisLabels: List<String> = listOf(),
     val connectionError: Boolean = false,
+    val noDataError: Boolean = true,
     val xValues: List<String> = (0..9).map { "" },
     val yValues: List<String> = (0..PLOT_Y_STEPS).map { "" },
     val verticalStep: Float = defaultVerticalStep,

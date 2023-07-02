@@ -7,6 +7,7 @@ import com.lexx.domain.PLOT_SECONDS_REFRESH_PERIOD
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
 import timber.log.Timber
 import java.lang.Exception
 import java.net.ConnectException
@@ -38,6 +39,8 @@ class WebServicePlotInfoRemoteDataSource @Inject constructor(
                 } catch (e: ConnectException) {
                     emit(Result.failure(e))
                 } catch (e: SocketTimeoutException) {
+                    emit(Result.failure(e))
+                } catch (e: HttpException) {
                     emit(Result.failure(e))
                 } catch (e: Exception) {
                     Timber.d("get remote SensorData exception: $e")

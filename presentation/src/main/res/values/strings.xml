@@ -7,4 +7,7 @@
     <string name="plot_page_title">Telemetry</string>
     <string name="sensors_page_title">Sensors</string>
     <string name="settings_page_title">Settings</string>
+    <string name="close">Close</string>
+    <string name="no_sensors_error">No sensors</string>
+    <string name="no_data_error">No data</string>
 </resources>
