@@ -76,7 +76,9 @@ class SensorsViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 val selectedId = _uiState.value.selectedSensorInfo.nameId
-                setSensorsColorUseCase(selectedId, uiMapper.mapColorToString(color))
+                setSensorsColorUseCase(
+                    uiMapper.mapSensorLocalInfoFromUi(_uiState.value.selectedSensorInfo.copy(color = color))
+                )
                 _uiState.value =
                     _uiState.value.copy(sensors = _uiState.value.sensors.map{
                         if (it.nameId == selectedId) {

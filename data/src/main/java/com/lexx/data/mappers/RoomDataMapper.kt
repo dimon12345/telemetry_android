@@ -16,7 +16,8 @@ class RoomDataMapper @Inject constructor() {
             SensorLocalInfo(
                 remoteSensorId = remoteSensorId,
                 color = color,
-                name = name
+                description = description,
+                enabled = enabled
             )
         }
     }

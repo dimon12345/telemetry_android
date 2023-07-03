@@ -12,12 +12,12 @@ class SensorsRoomLocalRepository @Inject constructor(
         return sensorsLocalDataSource.getSensorsInfo()
     }
 
-    override fun setSensorInfo(sensorId: Int, color: String, name: String) {
-        sensorsLocalDataSource.setSensorInfo(sensorId, color, name)
+    override fun setSensorInfo(sensorLocalInfo: SensorLocalInfo) {
+        sensorsLocalDataSource.setSensorInfo(sensorLocalInfo)
     }
 }
 
 interface SensorsLocalDataSource {
     fun getSensorsInfo(): Flow<List<SensorLocalInfo>>
-    fun setSensorInfo(sensorId: Int, color: String, name: String)
+    fun setSensorInfo(sensorLocalInfo: SensorLocalInfo)
 }

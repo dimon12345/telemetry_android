@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SensorsLocalRepository {
     fun getSensorsInfo(): Flow<List<SensorLocalInfo>>
-    fun setSensorInfo(sensorId: Int, color: String, name: String)
+    fun setSensorInfo(sensorLocalInfo: SensorLocalInfo)
 }

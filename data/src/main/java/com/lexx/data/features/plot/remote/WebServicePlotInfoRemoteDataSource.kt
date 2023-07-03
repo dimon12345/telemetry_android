@@ -42,6 +42,8 @@ class WebServicePlotInfoRemoteDataSource @Inject constructor(
                     emit(Result.failure(e))
                 } catch (e: HttpException) {
                     emit(Result.failure(e))
+                } catch (e: KotlinNullPointerException) {
+                    emit(Result.failure(e))
                 } catch (e: Exception) {
                     Timber.d("get remote SensorData exception: $e")
                     throw e

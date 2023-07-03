@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class LocalSensorDataDto (
     @PrimaryKey() val remoteSensorId: Int,
     val color: String,
-    val name: String,
+    val description: String,
+    val enabled: Boolean,
 )

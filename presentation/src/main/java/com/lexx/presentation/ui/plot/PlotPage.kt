@@ -6,11 +6,13 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -41,20 +43,34 @@ fun PlotPage (
             .background(Color.White)
     ) {
         if (uiState.noDataError) {
-            Text(
-                text = stringResource(id = R.string.no_data_error),
-            )
+            Column {
+                Text(
+                    text = stringResource(id = R.string.no_data_error),
+                    Modifier.wrapContentHeight(),
+                )
+                Text(
+                    text = uiState.errorMessage,
+                    Modifier.wrapContentHeight(),
+                    color = Color.Red,
+                )
+            }
         } else if (uiState.connectionError) {
             Row(
                 Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
             ) {
-                Text(
-                    text = stringResource(id = R.string.server_connect_error),
-                    color = Color.Red,
-                    modifier = Modifier.weight(1.0f)
-                )
+                Column {
+                    Text(
+                        text = stringResource(id = R.string.server_connect_error),
+                        modifier = Modifier.wrapContentHeight(),
+                    )
+                    Text(
+                        text = uiState.errorMessage,
+                        modifier = Modifier.wrapContentHeight(),
+                        color = Color.Red,
+                    )
+                }
             }
         } else {
             TelemetryPlot(

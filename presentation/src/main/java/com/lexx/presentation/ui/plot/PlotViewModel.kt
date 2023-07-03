@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -51,17 +52,21 @@ class PlotViewModel @Inject constructor(
                     } else {
                         PlotUiInfo(
                             noDataError = false,
-                            connectionError = true
+                            connectionError = true,
+                            errorMessage = remoteResult.toString()
                         )
                     }
                 }
                 .collect { plotInfo ->
-                    if (plotInfo.noDataError) {
-                        _uiState.value.copy(noDataError = true)
-                    } else if (plotInfo.connectionError) {
-                        _uiState.value.copy(
-                            noDataError = false,
-                            connectionError = true
+                    if (plotInfo.connectionError || plotInfo.noDataError) {
+                        if (plotInfo.noDataError) {
+                            Timber.d("no data Error")
+                        }
+
+                        _uiState.value = _uiState.value.copy(
+                            noDataError = plotInfo.noDataError,
+                            connectionError = plotInfo.connectionError,
+                            errorMessage = plotInfo.errorMessage,
                         )
                     } else {
                         val yStep = (plotInfo.maxValue - plotInfo.minValue) / PLOT_Y_STEPS

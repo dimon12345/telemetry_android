@@ -19,9 +19,16 @@ class SensorsRoomLocalDataSource @Inject constructor(
         }
     }
 
-    override fun setSensorInfo(sensorId: Int, color: String, name: String) {
+    override fun setSensorInfo(sensorLocalInfo: SensorLocalInfo) {
         localSensorDataDao.setSensorInfo(
-            LocalSensorDataDto(sensorId, color, name)
+            with(sensorLocalInfo) {
+                LocalSensorDataDto(
+                    remoteSensorId = remoteSensorId,
+                    color = color,
+                    description = description,
+                    enabled = enabled
+                )
+            }
         )
     }
 }

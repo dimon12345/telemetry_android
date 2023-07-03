@@ -46,7 +46,7 @@ class UiMapper @Inject constructor(
         val result = sensorsInfo.map {
             var uiInfo = SensorUiInfo(
                 nameId = it.nameId,
-                name = it.name,
+                description = it.name,
                 remoteName = it.name,
                 lastValue = it.lastValue,
                 lastTimestamp = it.lastTimestamp,
@@ -55,7 +55,7 @@ class UiMapper @Inject constructor(
             if ( localInfo != null) {
                 uiInfo.copy(
                     color = mapStringToColor(localInfo.color),
-                    remoteName = localInfo.name,
+                    description = localInfo.description,
                 )
             } else {
                 uiInfo
@@ -70,15 +70,15 @@ class UiMapper @Inject constructor(
     }
 
     fun mapPlotInfoToUi(plotInfo: PlotInfo, localInfo: Map<Int, SensorLocalInfo>): PlotUiInfo {
-        val noDataError = plotInfo.values.isEmpty()
         return PlotUiInfo(
             values = mapLinesToUi(plotInfo.values, localInfo),
             minValue = plotInfo.minValue,
             maxValue = plotInfo.maxValue,
             minTimestamp = plotInfo.minTimestamp,
             maxTimestamp = plotInfo.maxTimestamp,
+            connectionError = plotInfo.errorMessage.isNotEmpty(),
             errorMessage = plotInfo.errorMessage,
-            noDataError = noDataError
+            noDataError = plotInfo.values.isEmpty(),
         )
     }
 
@@ -109,5 +109,16 @@ class UiMapper @Inject constructor(
             value = plotData.value,
             timestamp = plotData.timestamp
         )
+    }
+
+    fun mapSensorLocalInfoFromUi(selectedSensorInfo: SensorUiInfo): SensorLocalInfo {
+        return with(selectedSensorInfo) {
+            SensorLocalInfo (
+                remoteSensorId = nameId,
+                color = mapColorToString(color),
+                description = description,
+                enabled = enabled
+            )
+        }
     }
 }

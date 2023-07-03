@@ -11,6 +11,7 @@ import retrofit2.HttpException
 import timber.log.Timber
 import java.lang.Exception
 import java.net.ConnectException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
@@ -37,7 +38,11 @@ class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
                     emit(Result.failure(e))
                 } catch (e: ConnectException) {
                     emit(Result.failure(e))
+                } catch (e: SocketTimeoutException) {
+                    emit(Result.failure(e))
                 } catch (e: HttpException) {
+                    emit(Result.failure(e))
+                } catch (e: KotlinNullPointerException) {
                     emit(Result.failure(e))
                 } catch (e: Exception) {
                     Timber.d("Get remote SensorInfo exception: $e")
