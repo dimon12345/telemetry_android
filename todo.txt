@@ -1,9 +1,6 @@
 MVP
 ===
-
-+ Sensors. Enable/disable sensor
 + Plot. 6 hours and 1 day periods
-+ coefficient
 
 Backlog
 =======

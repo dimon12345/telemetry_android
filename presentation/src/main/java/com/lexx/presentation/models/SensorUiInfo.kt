@@ -10,4 +10,5 @@ data class SensorUiInfo (
     val lastTimestamp: String = "",
     val color: Color = Color.Black,
     val enabled: Boolean = true,
+    val multiplier: String = "",
 )

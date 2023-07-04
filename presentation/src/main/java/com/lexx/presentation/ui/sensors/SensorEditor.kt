@@ -35,6 +35,7 @@ fun SensorEditor(
     onColorChanged: (Color) -> Unit,
     onCheckedChange: (Boolean) -> Unit,
     onDescriptionChanged: (String) -> Unit,
+    onMultiplierChanged: (String) -> Unit,
 ) {
     val controller = rememberColorPickerController()
 
@@ -60,6 +61,16 @@ fun SensorEditor(
                 onCheckedChange = onCheckedChange,
             )
 
+            Text(
+                text = stringResource(id = R.string.sensor_multiplier_label),
+                modifier = Modifier.padding(start = 20.dp)
+            )
+            TextField(
+                value = currentSensorInfo.multiplier,
+                onValueChange = {
+                    onMultiplierChanged(it)
+                }
+            )
         }
 
         TextField(

@@ -3,6 +3,7 @@ package com.lexx.presentation.ui.sensors
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lexx.domain.features.sensors.GetSensorsInfoUseCase
 import com.lexx.domain.features.sensors.GetSensorsLocalInfoUseCase
 import com.lexx.domain.features.sensors.SetSensorLocalInfoUseCase
@@ -102,6 +103,19 @@ class SensorsViewModel @Inject constructor(
                 )
                 _uiState.value = _uiState.value.copy(
                     selectedSensorInfo = _uiState.value.selectedSensorInfo.copy(description = description)
+                )
+            }
+        }
+    }
+
+    fun onMultiplierChangged(multiplier: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Default) {
+                setSensorLocalInfoUseCase(
+                    uiMapper.mapSensorLocalInfoFromUi(_uiState.value.selectedSensorInfo.copy(multiplier = multiplier))
+                )
+                _uiState.value = _uiState.value.copy(
+                    selectedSensorInfo = _uiState.value.selectedSensorInfo.copy(multiplier = multiplier)
                 )
             }
         }

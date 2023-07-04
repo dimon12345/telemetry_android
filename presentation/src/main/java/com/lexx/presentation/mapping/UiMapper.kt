@@ -57,6 +57,7 @@ class UiMapper @Inject constructor(
                     color = mapStringToColor(localInfo.color),
                     description = localInfo.description,
                     enabled = localInfo.enabled,
+                    multiplier = localInfo.multiplier.toString()
                 )
             } else {
                 uiInfo
@@ -85,15 +86,17 @@ class UiMapper @Inject constructor(
                     continue
                 }
             }
+            val multiplier = localSensorInfo?.multiplier ?: 1F
 
-            for (data in line.values) {
+                for (data in line.values) {
                 with(data) {
-                    if (minValue > value) {
-                        minValue = value
+                    val v = if (multiplier == 1F) {value} else {value * multiplier}
+                    if (minValue > v) {
+                        minValue = v
                     }
 
-                    if (maxValue < value) {
-                        maxValue = value
+                    if (maxValue < v) {
+                        maxValue = v
                     }
 
                     if (minTimestamp > timestamp) {
@@ -127,36 +130,46 @@ class UiMapper @Inject constructor(
         return lines.map {plotInfo ->
             val localPlotInfo = localInfo[plotInfo.nameId]
             val color = mapStringToColor(localPlotInfo?.color ?: "#FF000000")
-            val values = mapValuesToUi(plotInfo.values)
+            val multiplier = localPlotInfo?.multiplier ?: 1F
+            val values = mapValuesToUi(plotInfo.values, multiplier)
             PlotLineUiInfo(
                 nameId = plotInfo.nameId,
                 values = values,
                 color = color,
-                enabled = localPlotInfo?.enabled ?: true
+                enabled = localPlotInfo?.enabled ?: true,
+                multiplier = multiplier
             )
         }
     }
 
-    private fun mapValuesToUi(values: List<PlotData>): List<PlotUiData> {
+    private fun mapValuesToUi(values: List<PlotData>, multiplier: Float): List<PlotUiData> {
         return values.map {
-            mapPlotDataToUi(it)
+            mapPlotDataToUi(it, multiplier)
         }
     }
 
-    private fun mapPlotDataToUi(plotData: PlotData): PlotUiData {
-        return PlotUiData(
-            value = plotData.value,
-            timestamp = plotData.timestamp
-        )
+    private fun mapPlotDataToUi(plotData: PlotData, multiplier: Float): PlotUiData {
+        if (multiplier != 1F) {
+            return PlotUiData(
+                value = plotData.value * multiplier,
+                timestamp = plotData.timestamp
+            )
+        } else {
+            return PlotUiData(
+                value = plotData.value,
+                timestamp = plotData.timestamp
+            )
+        }
     }
 
     fun mapSensorLocalInfoFromUi(selectedSensorInfo: SensorUiInfo): SensorLocalInfo {
-        return with(selectedSensorInfo) {
+           return with(selectedSensorInfo) {
             SensorLocalInfo (
                 remoteSensorId = nameId,
                 color = mapColorToString(color),
                 description = description,
-                enabled = enabled
+                enabled = enabled,
+                multiplier = multiplier.toFloatOrNull() ?: 1F,
             )
         }
     }

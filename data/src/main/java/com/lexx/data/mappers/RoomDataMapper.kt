@@ -14,12 +14,13 @@ class RoomDataMapper @Inject constructor() {
 
     private fun mapSensorData(data: LocalSensorDataDto): SensorLocalInfo {
         return with(data) {
-            Timber.d("zzz room data mpper, sensor data dta $remoteSensorId, $color, $description, $enabled")
+            Timber.d("zzz room data mpper, sensor data dta $remoteSensorId, $color, $description, $enabled, $multiplier")
             SensorLocalInfo(
                 remoteSensorId = remoteSensorId,
                 color = color,
                 description = description,
-                enabled = enabled
+                enabled = enabled,
+                multiplier = multiplier
             )
         }
     }

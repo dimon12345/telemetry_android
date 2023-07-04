@@ -42,7 +42,8 @@ fun SensorsPage (
             onClose = {sensorsViewModel.onCloseEditor()},
             onColorChanged = {sensorsViewModel.onColorChanged(it)},
             onCheckedChange = { sensorsViewModel.onEnableChecked(it)},
-            onDescriptionChanged = { sensorsViewModel.onDescriptionChanged(it)}
+            onDescriptionChanged = { sensorsViewModel.onDescriptionChanged(it)},
+            onMultiplierChanged = { sensorsViewModel.onMultiplierChangged(it)}
         )
     } else if(uiState.noSensorsError) {
         Text(

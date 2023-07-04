@@ -23,12 +23,12 @@ class SensorsRoomLocalDataSource @Inject constructor(
     override fun setSensorInfo(sensorLocalInfo: SensorLocalInfo) {
         localSensorDataDao.setSensorInfo(
             with(sensorLocalInfo) {
-                Timber.d("zzz set sensor info $remoteSensorId, $color, $description, $enabled")
                 LocalSensorDataDto(
                     remoteSensorId = remoteSensorId,
                     color = color,
                     description = description,
-                    enabled = enabled
+                    enabled = enabled,
+                    multiplier = multiplier,
                 )
             }
         )

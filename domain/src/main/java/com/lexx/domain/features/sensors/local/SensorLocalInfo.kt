@@ -5,4 +5,5 @@ data class SensorLocalInfo(
     val color: String,
     val description: String,
     val enabled: Boolean,
+    val multiplier: Float
 )
