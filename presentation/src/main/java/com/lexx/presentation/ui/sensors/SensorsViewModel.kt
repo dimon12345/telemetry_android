@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lexx.domain.features.sensors.GetSensorsInfoUseCase
 import com.lexx.domain.features.sensors.GetSensorsLocalInfoUseCase
-import com.lexx.domain.features.sensors.SetSensorsColorUseCase
+import com.lexx.domain.features.sensors.SetSensorLocalInfoUseCase
 import com.lexx.domain.features.sensors.local.SensorLocalInfo
 import com.lexx.domain.models.SensorInfo
 import com.lexx.presentation.mapping.UiMapper
@@ -19,14 +19,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SensorsViewModel @Inject constructor(
     val getSensorsInfoUseCase: GetSensorsInfoUseCase,
     val getSensorsLocalInfoUseCase: GetSensorsLocalInfoUseCase,
-    val setSensorsColorUseCase: SetSensorsColorUseCase,
+    val setSensorLocalInfoUseCase: SetSensorLocalInfoUseCase,
     val uiMapper: UiMapper,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SensorsUiState())
@@ -75,18 +74,35 @@ class SensorsViewModel @Inject constructor(
     fun onColorChanged(color: Color) {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
-                val selectedId = _uiState.value.selectedSensorInfo.nameId
-                setSensorsColorUseCase(
+                setSensorLocalInfoUseCase(
                     uiMapper.mapSensorLocalInfoFromUi(_uiState.value.selectedSensorInfo.copy(color = color))
                 )
-                _uiState.value =
-                    _uiState.value.copy(sensors = _uiState.value.sensors.map{
-                        if (it.nameId == selectedId) {
-                            it.copy(color = color)
-                        }
-                        it
-                    })
-                Timber.d("here color check")
+            }
+        }
+    }
+
+    fun onEnableChecked(enabled: Boolean) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Default) {
+                setSensorLocalInfoUseCase(
+                    uiMapper.mapSensorLocalInfoFromUi(_uiState.value.selectedSensorInfo.copy(enabled = enabled))
+                )
+                _uiState.value = _uiState.value.copy(
+                    selectedSensorInfo = _uiState.value.selectedSensorInfo.copy(enabled = enabled)
+                )
+            }
+        }
+    }
+
+    fun onDescriptionChanged(description: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Default) {
+                setSensorLocalInfoUseCase(
+                    uiMapper.mapSensorLocalInfoFromUi(_uiState.value.selectedSensorInfo.copy(description = description))
+                )
+                _uiState.value = _uiState.value.copy(
+                    selectedSensorInfo = _uiState.value.selectedSensorInfo.copy(description = description)
+                )
             }
         }
     }

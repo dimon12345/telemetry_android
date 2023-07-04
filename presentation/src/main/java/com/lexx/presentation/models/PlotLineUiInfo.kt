@@ -6,4 +6,5 @@ data class PlotLineUiInfo(
     val nameId: Int,
     val values: List<PlotUiData>,
     val color: Color,
+    val enabled: Boolean
 )

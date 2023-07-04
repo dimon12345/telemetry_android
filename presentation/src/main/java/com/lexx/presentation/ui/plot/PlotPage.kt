@@ -156,6 +156,10 @@ fun TelemetryPlot(
 
                 if (plotInfo.values.isNotEmpty()) {
                     for (plotLine in plotInfo.values) {
+                        if (!plotLine.enabled) {
+                            continue
+                        }
+
                         val minTimestamp = plotInfo.minTimestamp
                         val timestampRange = plotInfo.maxTimestamp - minTimestamp
                         val minValue = plotInfo.minValue

@@ -41,7 +41,8 @@ fun SensorsPage (
             currentSensorInfo = uiState.selectedSensorInfo,
             onClose = {sensorsViewModel.onCloseEditor()},
             onColorChanged = {sensorsViewModel.onColorChanged(it)},
-            onCheckedChange = {}
+            onCheckedChange = { sensorsViewModel.onEnableChecked(it)},
+            onDescriptionChanged = { sensorsViewModel.onDescriptionChanged(it)}
         )
     } else if(uiState.noSensorsError) {
         Text(
@@ -74,11 +75,12 @@ fun SensorsPage (
                     key = { it.nameId }
                 ) { sensorInfo ->
                     SensorCard(
+                        enabled = sensorInfo.enabled,
                         sensorInfo = sensorInfo,
                         onClick = {
                             sensorsViewModel.onSensorClick(it)
                         },
-                        Modifier
+                        modifier = Modifier
                     )
                 }
             }
@@ -88,6 +90,7 @@ fun SensorsPage (
 
 @Composable
 fun SensorCard(
+    enabled: Boolean,
     sensorInfo: SensorUiInfo,
     onClick: (sensorInfo: SensorUiInfo) -> Unit,
     modifier: Modifier.Companion
@@ -97,11 +100,17 @@ fun SensorCard(
         modifier = modifier
             .fillMaxWidth()
     ) {
+        val color = if (enabled) {
+            sensorInfo.color
+        } else {
+            Color.Gray
+        }
+
         Card(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp, horizontal = 12.dp),
-            colors = CardDefaults.cardColors(containerColor=sensorInfo.color)
+            colors = CardDefaults.cardColors(containerColor=color)
         ) {
             Column(
                 Modifier

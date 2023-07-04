@@ -56,6 +56,7 @@ class UiMapper @Inject constructor(
                 uiInfo.copy(
                     color = mapStringToColor(localInfo.color),
                     description = localInfo.description,
+                    enabled = localInfo.enabled,
                 )
             } else {
                 uiInfo
@@ -70,12 +71,48 @@ class UiMapper @Inject constructor(
     }
 
     fun mapPlotInfoToUi(plotInfo: PlotInfo, localInfo: Map<Int, SensorLocalInfo>): PlotUiInfo {
+        if (plotInfo.values.isEmpty()) {
+            return PlotUiInfo()
+        }
+        var minValue = Float.MAX_VALUE
+        var maxValue = Float.MIN_VALUE
+        var minTimestamp = Long.MAX_VALUE
+        var maxTimestamp = Long.MIN_VALUE
+        for (line in plotInfo.values) {
+            val localSensorInfo = localInfo[line.nameId]
+            if (localSensorInfo != null) {
+                if (!localSensorInfo.enabled) {
+                    continue
+                }
+            }
+
+            for (data in line.values) {
+                with(data) {
+                    if (minValue > value) {
+                        minValue = value
+                    }
+
+                    if (maxValue < value) {
+                        maxValue = value
+                    }
+
+                    if (minTimestamp > timestamp) {
+                        minTimestamp = timestamp
+                    }
+
+                    if (maxTimestamp < timestamp) {
+                        maxTimestamp = timestamp
+                    }
+                }
+            }
+        }
+
         return PlotUiInfo(
             values = mapLinesToUi(plotInfo.values, localInfo),
-            minValue = plotInfo.minValue,
-            maxValue = plotInfo.maxValue,
-            minTimestamp = plotInfo.minTimestamp,
-            maxTimestamp = plotInfo.maxTimestamp,
+            minValue = minValue,
+            maxValue = maxValue,
+            minTimestamp = minTimestamp,
+            maxTimestamp = maxTimestamp,
             connectionError = plotInfo.errorMessage.isNotEmpty(),
             errorMessage = plotInfo.errorMessage,
             noDataError = plotInfo.values.isEmpty(),
@@ -88,12 +125,14 @@ class UiMapper @Inject constructor(
     ): List<PlotLineUiInfo> {
 
         return lines.map {plotInfo ->
-            val color = mapStringToColor(localInfo[plotInfo.nameId]?.color ?: "#FF000000")
+            val localPlotInfo = localInfo[plotInfo.nameId]
+            val color = mapStringToColor(localPlotInfo?.color ?: "#FF000000")
             val values = mapValuesToUi(plotInfo.values)
             PlotLineUiInfo(
                 nameId = plotInfo.nameId,
                 values = values,
                 color = color,
+                enabled = localPlotInfo?.enabled ?: true
             )
         }
     }

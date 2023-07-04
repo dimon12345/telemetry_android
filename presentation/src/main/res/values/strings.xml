@@ -11,4 +11,5 @@
     <string name="no_sensors_error">No sensors</string>
     <string name="no_data_error">No data</string>
     <string name="sensor_name_label">Sensor name:</string>
+    <string name="enabled_sensor_label">Enabled</string>
 </resources>

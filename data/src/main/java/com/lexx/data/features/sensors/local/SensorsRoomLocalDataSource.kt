@@ -6,6 +6,7 @@ import com.lexx.data.mappers.RoomDataMapper
 import com.lexx.domain.features.sensors.local.SensorLocalInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 class SensorsRoomLocalDataSource @Inject constructor(
@@ -22,6 +23,7 @@ class SensorsRoomLocalDataSource @Inject constructor(
     override fun setSensorInfo(sensorLocalInfo: SensorLocalInfo) {
         localSensorDataDao.setSensorInfo(
             with(sensorLocalInfo) {
+                Timber.d("zzz set sensor info $remoteSensorId, $color, $description, $enabled")
                 LocalSensorDataDto(
                     remoteSensorId = remoteSensorId,
                     color = color,

@@ -1,6 +1,5 @@
 package com.lexx.presentation.ui.sensors
 
-import android.graphics.ColorSpace
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,8 +13,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,15 +34,10 @@ fun SensorEditor(
     onClose: () -> Unit,
     onColorChanged: (Color) -> Unit,
     onCheckedChange: (Boolean) -> Unit,
+    onDescriptionChanged: (String) -> Unit,
 ) {
-    // on below line we are creating a variable for controller
     val controller = rememberColorPickerController()
-    val checkedState = remember { mutableStateOf(currentSensorInfo.enabled) }
 
-    //controller.selectedColor.value = controller.selectedColor.value.copy(color = color)
-    //controller.setWheelColor(currentSensorInfo.color)
-
-    // on below line we are creating a column,
     Column(
         // on below line we are adding a modifier to it,
         modifier = modifier
@@ -53,24 +45,31 @@ fun SensorEditor(
             // on below line we are adding a padding.
             .padding(all = 30.dp)
     ) {
-        Row () {
+        Row {
             Text(
                 text = stringResource(id = R.string.sensor_name_label) + currentSensorInfo.remoteName,
-                modifier = Modifier
             )
+
+            Text(
+                text = stringResource(id = R.string.enabled_sensor_label),
+                modifier = Modifier.padding(start = 20.dp)
+            )
+
             Checkbox(
-                checked = checkedState.value,
+                checked = currentSensorInfo.enabled,
                 onCheckedChange = onCheckedChange,
             )
+
         }
 
         TextField(
             value = currentSensorInfo.description,
-            onValueChange = {}
+            onValueChange = {onDescriptionChanged(it)}
         )
 
         Button(
             onClick = {
+                onColorChanged(controller.selectedColor.value)
                 onClose()
             }
         ) {
@@ -82,7 +81,9 @@ fun SensorEditor(
         // on below line we are adding a row.
         Row(
             // on below line we are adding a modifier
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .weight(1F)
+                .fillMaxWidth(),
             // on below line we are adding horizontal
             // and vertical alignment.
             horizontalArrangement = Arrangement.Center,
@@ -109,6 +110,7 @@ fun SensorEditor(
             // on below line we are
             // adding a modifier to it
             modifier = Modifier
+                .weight(3F)
                 .fillMaxWidth()
                 .height(450.dp)
                 .padding(10.dp),
@@ -127,6 +129,7 @@ fun SensorEditor(
             // on below line we
             // are adding a modifier to it.
             modifier = Modifier
+                .weight(1F)
                 .fillMaxWidth()
                 .padding(10.dp)
                 .height(35.dp),
@@ -144,6 +147,7 @@ fun SensorEditor(
             // on below line we
             // are adding a modifier to it.
             modifier = Modifier
+                .weight(1F)
                 .fillMaxWidth()
                 .padding(10.dp)
                 .height(35.dp),
