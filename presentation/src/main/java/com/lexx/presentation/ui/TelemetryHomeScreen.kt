@@ -25,10 +25,11 @@ import com.lexx.presentation.R
 import com.lexx.presentation.models.TelemetryAppUiState
 import com.lexx.presentation.navigation.NavigationAppContentType
 import com.lexx.presentation.navigation.TelemetryAppNavigationType
-import com.lexx.presentation.ui.plot.PlotContentType
 import com.lexx.presentation.ui.sensors.SensorsPage
 import com.lexx.presentation.ui.settings.SettingsPage
-import com.lexx.telemetry.ui.plot.PlotPage
+import com.lexx.telemetry.ui.plot.DayPlotPage
+import com.lexx.telemetry.ui.plot.HourPlotPage
+import com.lexx.telemetry.ui.plot.SixHoursPlotPage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +46,7 @@ fun TelemetryHomeScreen(
             text = stringResource(id = R.string.one_hour_title)
         ),
         NavigationItemContent(
-            navigationAppContentType = NavigationAppContentType.PLOT_6HOURS_CONTENT_TYPE,
+            navigationAppContentType = NavigationAppContentType.PLOT_SIX_HOURS_CONTENT_TYPE,
             icon = R.drawable.twotone_stacked_line_chart_24,
             text = stringResource(id = R.string.six_hour_title)
         ),
@@ -66,7 +67,7 @@ fun TelemetryHomeScreen(
 
     val title = when (telemetryAppUiState.currentTelemetryAppContent) {
         NavigationAppContentType.PLOT_HOUR_CONTENT_TYPE-> stringResource(id = R.string.plot_hour_page_title)
-        NavigationAppContentType.PLOT_6HOURS_CONTENT_TYPE-> stringResource(id = R.string.plot_six_hours_page_title)
+        NavigationAppContentType.PLOT_SIX_HOURS_CONTENT_TYPE-> stringResource(id = R.string.plot_six_hours_page_title)
         NavigationAppContentType.PLOT_DAY_CONTENT_TYPE-> stringResource(id = R.string.plot_day_page_title)
         NavigationAppContentType.SENSORS_CONTENT_TYPE-> stringResource(id = R.string.sensors_page_title)
         NavigationAppContentType.SETTINGS_CONTENT_TYPE-> stringResource(id = R.string.settings_page_title)
@@ -112,21 +113,18 @@ private fun TelemetryAppContent(
             ) {
                 when (navigationAppContentType) {
                     NavigationAppContentType.PLOT_HOUR_CONTENT_TYPE ->
-                        PlotPage(
+                        HourPlotPage(
                             modifier = Modifier.weight(1f),
-                            plotContentType = PlotContentType.PLOT_HOUR_CONTENT_TYPE
                         )
 
-                    NavigationAppContentType.PLOT_6HOURS_CONTENT_TYPE ->
-                        PlotPage(
+                    NavigationAppContentType.PLOT_SIX_HOURS_CONTENT_TYPE ->
+                        SixHoursPlotPage(
                             modifier = Modifier.weight(1f),
-                            plotContentType = PlotContentType.PLOT_6HOURS_CONTENT_TYPE
                         )
 
                     NavigationAppContentType.PLOT_DAY_CONTENT_TYPE ->
-                        PlotPage(
+                        DayPlotPage(
                             modifier = Modifier.weight(1f),
-                            plotContentType = PlotContentType.PLOT_DAY_CONTENT_TYPE
                         )
 
                     NavigationAppContentType.SETTINGS_CONTENT_TYPE ->

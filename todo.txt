@@ -1,9 +1,3 @@
-MVP
-===
-+ Plot. 6 hours and 1 day periods
-
-Backlog
-=======
 + Fix x axis labels mapper
 + Sensor. name
 * Optimization

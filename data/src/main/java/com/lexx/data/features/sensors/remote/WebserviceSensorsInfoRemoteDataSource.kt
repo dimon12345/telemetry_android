@@ -20,6 +20,7 @@ class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
 ) : SensorsInfoRemoteDataSource {
 
     private var paused = false
+    private var sensorsPaused = false
     override fun pauseNetworkPolling() {
         paused = true
     }
@@ -28,9 +29,13 @@ class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
         paused = false
     }
 
+    override fun pauseSensorPolling(pause: Boolean) {
+        sensorsPaused = pause
+    }
+
     override val sensorsInfo: Flow<Result<List<SensorInfoDto>>> = flow {
         while(true) {
-            if (!paused) {
+            if (!paused && !sensorsPaused) {
                 try {
                     val sensorsInfo = telemetryApiService.getSensorsInfo()
                     emit(Result.success(sensorsInfo))

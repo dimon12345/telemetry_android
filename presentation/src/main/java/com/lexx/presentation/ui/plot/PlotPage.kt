@@ -29,34 +29,59 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lexx.presentation.R
 import com.lexx.presentation.models.PlotUiInfo
-import com.lexx.presentation.ui.plot.PlotContentType
+import com.lexx.presentation.models.PlotUiPageState
 import com.lexx.presentation.ui.plot.PlotViewModel
 
 @Composable
-fun PlotPage (
-    plotViewModel: PlotViewModel = viewModel(),
+fun HourPlotPage (
     modifier: Modifier = Modifier,
-    plotContentType: PlotContentType,
+    plotViewModel: PlotViewModel = viewModel(),
 ) {
     val uiState = plotViewModel.uiState.collectAsState().value
+    PlotPageBase(modifier, uiState.hourPlotUiPageState)
+}
+
+@Composable
+fun SixHoursPlotPage (
+    modifier: Modifier = Modifier,
+    plotViewModel: PlotViewModel = viewModel(),
+) {
+    val uiState = plotViewModel.uiState.collectAsState().value
+    PlotPageBase(modifier, uiState.sixHoursPlotUiPageState)
+}
+@Composable
+fun DayPlotPage (
+    modifier: Modifier = Modifier,
+    plotViewModel: PlotViewModel = viewModel(),
+) {
+    val uiState = plotViewModel.uiState.collectAsState().value
+    PlotPageBase(modifier, uiState.dayPlotUiPageState)
+}
+
+@Composable
+fun PlotPageBase (
+    modifier: Modifier = Modifier,
+    plotUiPageState: PlotUiPageState,
+) {
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        if (uiState.noDataError) {
+        if (plotUiPageState.noDataError) {
             Column {
                 Text(
                     text = stringResource(id = R.string.no_data_error),
                     Modifier.wrapContentHeight(),
                 )
                 Text(
-                    text = uiState.errorMessage,
+                    text = plotUiPageState.errorMessage,
                     Modifier.wrapContentHeight(),
                     color = Color.Red,
                 )
             }
-        } else if (uiState.connectionError) {
+        } else if (plotUiPageState.connectionError) {
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -68,7 +93,7 @@ fun PlotPage (
                         modifier = Modifier.wrapContentHeight(),
                     )
                     Text(
-                        text = uiState.errorMessage,
+                        text = plotUiPageState.errorMessage,
                         modifier = Modifier.wrapContentHeight(),
                         color = Color.Red,
                     )
@@ -79,9 +104,9 @@ fun PlotPage (
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(),
-                xValues = uiState.xValues,
-                yValues = uiState.yValues,
-                plotInfo = uiState.plotInfo,
+                xValues = plotUiPageState.xValues,
+                yValues = plotUiPageState.yValues,
+                plotInfo = plotUiPageState.plotInfo,
                 paddingSpace = dimensionResource(id = R.dimen.plot_padding_space),
             )
         }

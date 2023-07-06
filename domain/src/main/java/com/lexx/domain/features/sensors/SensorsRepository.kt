@@ -7,4 +7,5 @@ interface SensorsRepository {
     fun getSensorsInfo(): Flow<Result<List<SensorInfo>>>
     fun pauseNetworkPolling()
     fun resumeNetworkPolling()
+    fun pauseSensorPolling(pause: Boolean)
 }

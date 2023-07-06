@@ -20,9 +20,37 @@ class PlotRemoteRepository @Inject constructor(
         plotInfoRemoteDataSource.resumeNetworkPolling()
     }
 
-    override suspend fun getPlotInfo(): Flow<Result<PlotInfo>> {
+    override fun pauseHourPolling(pause: Boolean) {
+        plotInfoRemoteDataSource.pauseHourPolling(pause)
+    }
+
+    override fun pauseSixHoursPolling(pause: Boolean) {
+        plotInfoRemoteDataSource.pauseSixHoursPolling(pause)
+    }
+
+    override fun pauseDayPolling(pause: Boolean) {
+        plotInfoRemoteDataSource.pauseDayPolling(pause)
+    }
+
+    override suspend fun getHourPlotInfo(): Flow<Result<PlotInfo>> {
         return plotInfoRemoteDataSource.
-            sensorsData.map{
+        hourSensorsData.map{
+            it.map{
+                mapper.mapPlotInfo(it)
+            }
+        }
+    }
+    override suspend fun getSixHoursPlotInfo(): Flow<Result<PlotInfo>> {
+        return plotInfoRemoteDataSource.
+        sixHoursSensorsData.map{
+            it.map{
+                mapper.mapPlotInfo(it)
+            }
+        }
+    }
+    override suspend fun getDayPlotInfo(): Flow<Result<PlotInfo>> {
+        return plotInfoRemoteDataSource.
+        daySensorsData.map{
             it.map{
                 mapper.mapPlotInfo(it)
             }
@@ -33,6 +61,11 @@ class PlotRemoteRepository @Inject constructor(
 interface PlotInfoRemoteDataSource {
     fun pauseNetworkPolling()
     fun resumeNetworkPolling()
+    fun pauseHourPolling(pause: Boolean)
+    fun pauseSixHoursPolling(pause: Boolean)
+    fun pauseDayPolling(pause: Boolean)
 
-    val sensorsData: Flow<Result<List<SensorDataDto>>>
+    val hourSensorsData: Flow<Result<List<SensorDataDto>>>
+    val sixHoursSensorsData: Flow<Result<List<SensorDataDto>>>
+    val daySensorsData: Flow<Result<List<SensorDataDto>>>
 }

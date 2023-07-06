@@ -20,6 +20,9 @@ class WebServicePlotInfoRemoteDataSource @Inject constructor(
 ) : PlotInfoRemoteDataSource {
 
     private var paused = false
+    private var hourPaused = false
+    private var sixHoursPaused = true
+    private var dayPaused = true
     override fun pauseNetworkPolling() {
         paused = true
     }
@@ -28,11 +31,44 @@ class WebServicePlotInfoRemoteDataSource @Inject constructor(
         paused = false
     }
 
-    override val sensorsData: Flow<Result<List<SensorDataDto>>> = flow {
+    override fun pauseHourPolling(pause: Boolean) {
+        hourPaused = pause
+    }
+
+    override fun pauseSixHoursPolling(pause: Boolean) {
+        sixHoursPaused = pause
+    }
+
+    override fun pauseDayPolling(pause: Boolean) {
+        dayPaused = pause
+    }
+
+    private enum class IntervalType {
+        HOUR_INTERVAL,
+        SIX_HOURS_INTERVAL,
+        DAY_INTERVAL
+    }
+
+    private fun createHourSensorsDataFlow(interval: String) : Flow<Result<List<SensorDataDto>>> = flow {
+
+        val intervalType = if (interval == "sixHours") {
+            IntervalType.SIX_HOURS_INTERVAL
+        } else if (interval == "day") {
+            IntervalType.DAY_INTERVAL
+        } else {
+            IntervalType.HOUR_INTERVAL
+        }
+
         while(true) {
-            if (!paused) {
+            val intervalPaused = when(intervalType) {
+                IntervalType.HOUR_INTERVAL -> hourPaused
+                IntervalType.SIX_HOURS_INTERVAL -> sixHoursPaused
+                IntervalType.DAY_INTERVAL -> dayPaused
+            }
+
+            if (!paused && !intervalPaused) {
                 try {
-                    val sensorsData = telemetryApiService.getSensorsData()
+                    val sensorsData = telemetryApiService.getSensorsData(interval)
                     emit(Result.success(sensorsData))
                 } catch (e: UnknownHostException) {
                     emit(Result.failure(e))
@@ -52,4 +88,8 @@ class WebServicePlotInfoRemoteDataSource @Inject constructor(
             delay(PLOT_SECONDS_REFRESH_PERIOD * 1000L)
         }
     }
+
+    override val hourSensorsData: Flow<Result<List<SensorDataDto>>> = createHourSensorsDataFlow("hour")
+    override val sixHoursSensorsData: Flow<Result<List<SensorDataDto>>> = createHourSensorsDataFlow("sixHours")
+    override val daySensorsData: Flow<Result<List<SensorDataDto>>> = createHourSensorsDataFlow("day")
 }
