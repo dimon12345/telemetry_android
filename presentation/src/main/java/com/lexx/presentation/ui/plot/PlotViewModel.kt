@@ -12,11 +12,11 @@ import com.lexx.presentation.mapping.UiMapper
 import com.lexx.presentation.models.PlotUiInfo
 import com.lexx.presentation.models.PlotUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,7 +34,7 @@ class PlotViewModel @Inject constructor(
     }
 
     private fun loadSensors() {
-        viewModelScope.async {
+        viewModelScope.launch {
             getPlotInfoUseCase()
                 .combine(getSensorsLocalInfoUseCase()) { remoteResult: Result<PlotInfo>, sensorsLocalInfo: List<SensorLocalInfo> ->
                     if (remoteResult.isSuccess) {
