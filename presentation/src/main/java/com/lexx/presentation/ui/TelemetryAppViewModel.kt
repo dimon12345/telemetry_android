@@ -7,10 +7,10 @@ import com.lexx.domain.features.sensors.SensorsRepository
 import com.lexx.presentation.models.TelemetryAppUiState
 import com.lexx.presentation.navigation.NavigationAppContentType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +25,7 @@ class TelemetryAppViewModel @Inject constructor(
     val uiState: StateFlow<TelemetryAppUiState> = _uiState.asStateFlow()
 
     fun updateNavigationContent(navigationAppContentType: NavigationAppContentType) {
-        viewModelScope.launch {
+        viewModelScope.async {
             _uiState.value = _uiState.value.copy(currentTelemetryAppContent = navigationAppContentType)
         }
     }

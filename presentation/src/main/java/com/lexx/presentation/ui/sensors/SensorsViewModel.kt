@@ -14,11 +14,11 @@ import com.lexx.presentation.models.SensorUiInfo
 import com.lexx.presentation.models.SensorsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -37,7 +37,7 @@ class SensorsViewModel @Inject constructor(
     }
 
     private fun observeSensorsInfo() {
-        viewModelScope.launch {
+        viewModelScope.async {
             getSensorsInfoUseCase()
                 .combine(getSensorsLocalInfoUseCase()) { info: Result<List<SensorInfo>>, localInfo: List<SensorLocalInfo> ->
                     if (info.isSuccess) {
@@ -73,7 +73,7 @@ class SensorsViewModel @Inject constructor(
     }
 
     fun onColorChanged(color: Color) {
-        viewModelScope.launch {
+        viewModelScope.async {
             withContext(Dispatchers.Default) {
                 setSensorLocalInfoUseCase(
                     uiMapper.mapSensorLocalInfoFromUi(_uiState.value.selectedSensorInfo.copy(color = color))
@@ -83,7 +83,7 @@ class SensorsViewModel @Inject constructor(
     }
 
     fun onEnableChecked(enabled: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.async {
             withContext(Dispatchers.Default) {
                 setSensorLocalInfoUseCase(
                     uiMapper.mapSensorLocalInfoFromUi(_uiState.value.selectedSensorInfo.copy(enabled = enabled))
@@ -96,7 +96,7 @@ class SensorsViewModel @Inject constructor(
     }
 
     fun onDescriptionChanged(description: String) {
-        viewModelScope.launch {
+        viewModelScope.async {
             withContext(Dispatchers.Default) {
                 setSensorLocalInfoUseCase(
                     uiMapper.mapSensorLocalInfoFromUi(_uiState.value.selectedSensorInfo.copy(description = description))
@@ -109,7 +109,7 @@ class SensorsViewModel @Inject constructor(
     }
 
     fun onMultiplierChangged(multiplier: String) {
-        viewModelScope.launch {
+        viewModelScope.async {
             withContext(Dispatchers.Default) {
                 setSensorLocalInfoUseCase(
                     uiMapper.mapSensorLocalInfoFromUi(_uiState.value.selectedSensorInfo.copy(multiplier = multiplier))
