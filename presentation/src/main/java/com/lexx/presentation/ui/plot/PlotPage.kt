@@ -29,12 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lexx.presentation.R
 import com.lexx.presentation.models.PlotUiInfo
+import com.lexx.presentation.ui.plot.PlotContentType
 import com.lexx.presentation.ui.plot.PlotViewModel
 
 @Composable
 fun PlotPage (
     plotViewModel: PlotViewModel = viewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    plotContentType: PlotContentType,
 ) {
     val uiState = plotViewModel.uiState.collectAsState().value
     Box(

@@ -25,6 +25,7 @@ import com.lexx.presentation.R
 import com.lexx.presentation.models.TelemetryAppUiState
 import com.lexx.presentation.navigation.NavigationAppContentType
 import com.lexx.presentation.navigation.TelemetryAppNavigationType
+import com.lexx.presentation.ui.plot.PlotContentType
 import com.lexx.presentation.ui.sensors.SensorsPage
 import com.lexx.presentation.ui.settings.SettingsPage
 import com.lexx.telemetry.ui.plot.PlotPage
@@ -39,8 +40,19 @@ fun TelemetryHomeScreen(
 ) {
     val navigationItemContentList = listOf(
         NavigationItemContent(
-            navigationAppContentType = NavigationAppContentType.PLOT_CONTENT_TYPE,
-            icon = R.drawable.twotone_stacked_line_chart_24
+            navigationAppContentType = NavigationAppContentType.PLOT_HOUR_CONTENT_TYPE,
+            icon = R.drawable.twotone_stacked_line_chart_24,
+            text = stringResource(id = R.string.one_hour_title)
+        ),
+        NavigationItemContent(
+            navigationAppContentType = NavigationAppContentType.PLOT_6HOURS_CONTENT_TYPE,
+            icon = R.drawable.twotone_stacked_line_chart_24,
+            text = stringResource(id = R.string.six_hour_title)
+        ),
+        NavigationItemContent(
+            navigationAppContentType = NavigationAppContentType.PLOT_DAY_CONTENT_TYPE,
+            icon = R.drawable.twotone_stacked_line_chart_24,
+            text = stringResource(id = R.string.one_day_title)
         ),
         NavigationItemContent(
             navigationAppContentType = NavigationAppContentType.SENSORS_CONTENT_TYPE,
@@ -53,7 +65,9 @@ fun TelemetryHomeScreen(
     )
 
     val title = when (telemetryAppUiState.currentTelemetryAppContent) {
-        NavigationAppContentType.PLOT_CONTENT_TYPE-> stringResource(id = R.string.plot_page_title)
+        NavigationAppContentType.PLOT_HOUR_CONTENT_TYPE-> stringResource(id = R.string.plot_hour_page_title)
+        NavigationAppContentType.PLOT_6HOURS_CONTENT_TYPE-> stringResource(id = R.string.plot_six_hours_page_title)
+        NavigationAppContentType.PLOT_DAY_CONTENT_TYPE-> stringResource(id = R.string.plot_day_page_title)
         NavigationAppContentType.SENSORS_CONTENT_TYPE-> stringResource(id = R.string.sensors_page_title)
         NavigationAppContentType.SETTINGS_CONTENT_TYPE-> stringResource(id = R.string.settings_page_title)
     }
@@ -97,8 +111,23 @@ private fun TelemetryAppContent(
                     .background(MaterialTheme.colorScheme.inverseOnSurface)
             ) {
                 when (navigationAppContentType) {
-                    NavigationAppContentType.PLOT_CONTENT_TYPE ->
-                        PlotPage(modifier = Modifier.weight(1f))
+                    NavigationAppContentType.PLOT_HOUR_CONTENT_TYPE ->
+                        PlotPage(
+                            modifier = Modifier.weight(1f),
+                            plotContentType = PlotContentType.PLOT_HOUR_CONTENT_TYPE
+                        )
+
+                    NavigationAppContentType.PLOT_6HOURS_CONTENT_TYPE ->
+                        PlotPage(
+                            modifier = Modifier.weight(1f),
+                            plotContentType = PlotContentType.PLOT_6HOURS_CONTENT_TYPE
+                        )
+
+                    NavigationAppContentType.PLOT_DAY_CONTENT_TYPE ->
+                        PlotPage(
+                            modifier = Modifier.weight(1f),
+                            plotContentType = PlotContentType.PLOT_DAY_CONTENT_TYPE
+                        )
 
                     NavigationAppContentType.SETTINGS_CONTENT_TYPE ->
                         SettingsPage(modifier = Modifier.weight(1f))
@@ -133,6 +162,11 @@ private fun TelemetryAppNavigationRail(
             NavigationRailItem(
                 selected = currentTab == navItem.navigationAppContentType,
                 onClick = { onTabPressed(navItem.navigationAppContentType) },
+                label = {
+                    Text(
+                        text = navItem.text
+                    )
+                },
                 icon = {
                     Icon(
                         painter = painterResource(id = navItem.icon),
@@ -170,4 +204,5 @@ private fun TelemetryAppBottomNavigationBar(
 private data class NavigationItemContent (
     val navigationAppContentType: NavigationAppContentType,
     val icon: Int,
+    val text: String = "",
 )
