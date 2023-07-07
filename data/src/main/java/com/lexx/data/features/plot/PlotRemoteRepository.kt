@@ -12,12 +12,8 @@ class PlotRemoteRepository @Inject constructor(
     private val plotInfoRemoteDataSource: PlotInfoRemoteDataSource,
     private val mapper: WebServiceDataMapper,
 ) : PlotRepository {
-    override fun pauseNetworkPolling() {
-        plotInfoRemoteDataSource.pauseNetworkPolling()
-    }
-
-    override fun resumeNetworkPolling() {
-        plotInfoRemoteDataSource.resumeNetworkPolling()
+    override fun pauseNetworkPolling(pause: Boolean) {
+        plotInfoRemoteDataSource.pauseNetworkPolling(pause)
     }
 
     override fun pauseHourPolling(pause: Boolean) {
@@ -59,8 +55,7 @@ class PlotRemoteRepository @Inject constructor(
 }
 
 interface PlotInfoRemoteDataSource {
-    fun pauseNetworkPolling()
-    fun resumeNetworkPolling()
+    fun pauseNetworkPolling(pause: Boolean)
     fun pauseHourPolling(pause: Boolean)
     fun pauseSixHoursPolling(pause: Boolean)
     fun pauseDayPolling(pause: Boolean)

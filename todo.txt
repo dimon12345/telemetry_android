@@ -1,5 +1,4 @@
-+ Fix x axis labels mapper
-+ Sensor. name
+* Clean Up
 * Optimization
 * Tests
 * Mock data

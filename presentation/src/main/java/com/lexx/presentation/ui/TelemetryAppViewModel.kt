@@ -37,12 +37,12 @@ class TelemetryAppViewModel @Inject constructor(
     }
 
     fun onPause() {
-        sensorsRepository.pauseNetworkPolling()
-        plotRepository.pauseNetworkPolling()
+        sensorsRepository.pauseNetworkPolling(true)
+        plotRepository.pauseNetworkPolling(true)
     }
 
     fun onResume() {
-        sensorsRepository.resumeNetworkPolling()
-        plotRepository.resumeNetworkPolling()
+        sensorsRepository.pauseNetworkPolling(false)
+        plotRepository.pauseNetworkPolling(false)
     }
 }

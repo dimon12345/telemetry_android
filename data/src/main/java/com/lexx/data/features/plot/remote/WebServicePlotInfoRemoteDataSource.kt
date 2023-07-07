@@ -23,12 +23,8 @@ class WebServicePlotInfoRemoteDataSource @Inject constructor(
     private var hourPaused = false
     private var sixHoursPaused = true
     private var dayPaused = true
-    override fun pauseNetworkPolling() {
-        paused = true
-    }
-
-    override fun resumeNetworkPolling() {
-        paused = false
+    override fun pauseNetworkPolling(pause: Boolean) {
+        paused = pause
     }
 
     override fun pauseHourPolling(pause: Boolean) {

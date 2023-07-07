@@ -20,12 +20,8 @@ class SensorsInfoRepository @Inject constructor(
         }
     }
 
-    override fun pauseNetworkPolling() {
-        sensorsInfoRemoteDataSource.pauseNetworkPolling()
-    }
-
-    override fun resumeNetworkPolling() {
-        sensorsInfoRemoteDataSource.resumeNetworkPolling()
+    override fun pauseNetworkPolling(pause: Boolean) {
+        sensorsInfoRemoteDataSource.pauseNetworkPolling(pause)
     }
 
     override fun pauseSensorPolling(pause: Boolean) {
@@ -34,8 +30,7 @@ class SensorsInfoRepository @Inject constructor(
 }
 
 interface SensorsInfoRemoteDataSource {
-    fun pauseNetworkPolling()
-    fun resumeNetworkPolling()
+    fun pauseNetworkPolling(pause: Boolean)
     fun pauseSensorPolling(pause: Boolean)
 
     val sensorsInfo: Flow<Result<List<SensorInfoDto>>>

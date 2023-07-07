@@ -21,12 +21,8 @@ class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
 
     private var paused = false
     private var sensorsPaused = false
-    override fun pauseNetworkPolling() {
-        paused = true
-    }
-
-    override fun resumeNetworkPolling() {
-        paused = false
+    override fun pauseNetworkPolling(pause: Boolean) {
+        paused = pause
     }
 
     override fun pauseSensorPolling(pause: Boolean) {
