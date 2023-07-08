@@ -188,6 +188,11 @@ private fun TelemetryAppBottomNavigationBar(
             NavigationBarItem(
                 selected = currentTab == navItem.navigationAppContentType,
                 onClick = { onTabPressed(navItem.navigationAppContentType) },
+                label = {
+                    Text(
+                        text = navItem.text
+                    )
+                },
                 icon = {
                     Icon(
                         painter = painterResource(id = navItem.icon),
