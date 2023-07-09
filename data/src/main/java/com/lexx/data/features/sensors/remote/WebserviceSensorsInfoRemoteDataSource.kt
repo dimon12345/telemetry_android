@@ -32,23 +32,9 @@ class WebserviceSensorsInfoRemoteDataSource @Inject constructor(
     override val sensorsInfo: Flow<Result<List<SensorInfoDto>>> = flow {
         while(true) {
             if (!paused && !sensorsPaused) {
-                try {
-                    val sensorsInfo = telemetryApiService.getSensorsInfo()
-                    emit(Result.success(sensorsInfo))
-                } catch (e: UnknownHostException) {
-                    emit(Result.failure(e))
-                } catch (e: ConnectException) {
-                    emit(Result.failure(e))
-                } catch (e: SocketTimeoutException) {
-                    emit(Result.failure(e))
-                } catch (e: HttpException) {
-                    emit(Result.failure(e))
-                } catch (e: KotlinNullPointerException) {
-                    emit(Result.failure(e))
-                } catch (e: Exception) {
-                    Timber.d("Get remote SensorInfo exception: $e")
-                    throw e
-                }
+                emit(Result.runCatching {
+                    telemetryApiService.getSensorsInfo()
+                })
             }
             delay(SENSORS_SECONDS_REFRESH_PERIOD * 1000L)
         }

@@ -41,10 +41,6 @@ class DataStoreSettingsRepository @Inject constructor(
         preferenceKey: Key<String>,
         preferenceDefaultValue: String = ""
     ): String {
-        return try {
-            dataStorePreferences.data.first()[preferenceKey] ?: preferenceDefaultValue
-        } catch (e: Exception) {
-            throw e
-        }
+        return dataStorePreferences.data.first()[preferenceKey] ?: preferenceDefaultValue
     }
 }

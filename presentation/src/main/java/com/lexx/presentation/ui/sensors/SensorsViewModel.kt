@@ -3,7 +3,6 @@ package com.lexx.presentation.ui.sensors
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lexx.domain.features.sensors.GetSensorsInfoUseCase
 import com.lexx.domain.features.sensors.GetSensorsLocalInfoUseCase
 import com.lexx.domain.features.sensors.SetSensorLocalInfoUseCase
@@ -40,22 +39,40 @@ class SensorsViewModel @Inject constructor(
         viewModelScope.launch {
             getSensorsInfoUseCase()
                 .combine(getSensorsLocalInfoUseCase()) { info: Result<List<SensorInfo>>, localInfo: List<SensorLocalInfo> ->
-                    if (info.isSuccess) {
-                        uiMapper.mapSensorInfoToUi(info.getOrDefault(listOf()), localInfo)
-                    } else {
-                        listOf()
-                    }
+                    combineSensorsUiInfo(info, localInfo)
                 }.collect {
-                    if (it.isEmpty()) {
-                        _uiState.value = _uiState.value.copy(noSensorsError = true)
+                    if (it.connectionError) {
+                        _uiState.value = _uiState.value.copy(
+                            noSensorsError = false,
+                            connectionError = true,
+                            errorMessage = it.errorMessage
+                        )
+                    } else if (it.sensors.isEmpty()) {
+                        _uiState.value = _uiState.value.copy(
+                            noSensorsError = true,
+                            connectionError = false,
+                            errorMessage = ""
+                        )
                     } else {
                         _uiState.value = _uiState.value.copy(
                             noSensorsError = false,
                             connectionError = false,
-                            sensors = it
+                            sensors = it.sensors,
+                            errorMessage = ""
                         )
                     }
                 }
+        }
+    }
+
+    private fun combineSensorsUiInfo(
+        info: Result<List<SensorInfo>>,
+        localInfo: List<SensorLocalInfo>
+    ) : SensorsUiState {
+        if (info.isSuccess) {
+            return SensorsUiState(sensors = uiMapper.mapSensorInfoToUi(info.getOrDefault(listOf()), localInfo))
+        } else {
+            return SensorsUiState(connectionError = true, errorMessage = info.exceptionOrNull()?.localizedMessage ?: "")
         }
     }
 
