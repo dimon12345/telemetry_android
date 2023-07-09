@@ -63,23 +63,9 @@ class WebServicePlotInfoRemoteDataSource @Inject constructor(
             }
 
             if (!paused && !intervalPaused) {
-                try {
-                    val sensorsData = telemetryApiService.getSensorsData(interval)
-                    emit(Result.success(sensorsData))
-                } catch (e: UnknownHostException) {
-                    emit(Result.failure(e))
-                } catch (e: ConnectException) {
-                    emit(Result.failure(e))
-                } catch (e: SocketTimeoutException) {
-                    emit(Result.failure(e))
-                } catch (e: HttpException) {
-                    emit(Result.failure(e))
-                } catch (e: KotlinNullPointerException) {
-                    emit(Result.failure(e))
-                } catch (e: Exception) {
-                    Timber.d("get remote SensorData exception: $e")
-                    throw e
-                }
+                emit(Result.runCatching {
+                    telemetryApiService.getSensorsData(interval)
+                })
             }
             delay(PLOT_SECONDS_REFRESH_PERIOD * 1000L)
         }
