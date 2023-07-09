@@ -1,3 +1,4 @@
+* restore selected tab on restart
 * day interval
 * Clean Up
 * Optimization
