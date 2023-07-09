@@ -37,31 +37,33 @@ class SensorsViewModel @Inject constructor(
 
     private fun observeSensorsInfo() {
         viewModelScope.launch {
-            getSensorsInfoUseCase()
-                .combine(getSensorsLocalInfoUseCase()) { info: Result<List<SensorInfo>>, localInfo: List<SensorLocalInfo> ->
-                    combineSensorsUiInfo(info, localInfo)
-                }.collect {
-                    if (it.connectionError) {
-                        _uiState.value = _uiState.value.copy(
-                            noSensorsError = false,
-                            connectionError = true,
-                            errorMessage = it.errorMessage
-                        )
-                    } else if (it.sensors.isEmpty()) {
-                        _uiState.value = _uiState.value.copy(
-                            noSensorsError = true,
-                            connectionError = false,
-                            errorMessage = ""
-                        )
-                    } else {
-                        _uiState.value = _uiState.value.copy(
-                            noSensorsError = false,
-                            connectionError = false,
-                            sensors = it.sensors,
-                            errorMessage = ""
-                        )
+            withContext(Dispatchers.IO) {
+                getSensorsInfoUseCase()
+                    .combine(getSensorsLocalInfoUseCase()) { info: Result<List<SensorInfo>>, localInfo: List<SensorLocalInfo> ->
+                        combineSensorsUiInfo(info, localInfo)
+                    }.collect {
+                        if (it.connectionError) {
+                            _uiState.value = _uiState.value.copy(
+                                noSensorsError = false,
+                                connectionError = true,
+                                errorMessage = it.errorMessage
+                            )
+                        } else if (it.sensors.isEmpty()) {
+                            _uiState.value = _uiState.value.copy(
+                                noSensorsError = true,
+                                connectionError = false,
+                                errorMessage = ""
+                            )
+                        } else {
+                            _uiState.value = _uiState.value.copy(
+                                noSensorsError = false,
+                                connectionError = false,
+                                sensors = it.sensors,
+                                errorMessage = ""
+                            )
+                        }
                     }
-                }
+            }
         }
     }
 
@@ -125,7 +127,7 @@ class SensorsViewModel @Inject constructor(
         }
     }
 
-    fun onMultiplierChangged(multiplier: String) {
+    fun onMultiplierChanged(multiplier: String) {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 setSensorLocalInfoUseCase(

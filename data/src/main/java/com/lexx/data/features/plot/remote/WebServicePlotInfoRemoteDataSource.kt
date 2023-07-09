@@ -3,10 +3,14 @@ package com.lexx.data.features.plot.remote
 import com.lexx.data.api.telemetry.TelemetryApiService
 import com.lexx.data.api.telemetry.models.SensorDataDto
 import com.lexx.data.features.plot.PlotInfoRemoteDataSource
+import com.lexx.data.mappers.WebServiceDataMapper
 import com.lexx.domain.PLOT_SECONDS_REFRESH_PERIOD
+import com.lexx.domain.models.PlotInfo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
 import java.lang.Exception
@@ -17,6 +21,7 @@ import javax.inject.Inject
 
 class WebServicePlotInfoRemoteDataSource @Inject constructor(
     private val telemetryApiService: TelemetryApiService,
+    private val mapper: WebServiceDataMapper,
 ) : PlotInfoRemoteDataSource {
 
     private var paused = false
@@ -45,7 +50,7 @@ class WebServicePlotInfoRemoteDataSource @Inject constructor(
         DAY_INTERVAL
     }
 
-    private fun createHourSensorsDataFlow(interval: String) : Flow<Result<List<SensorDataDto>>> = flow {
+    private fun createHourSensorsDataFlow(interval: String) : Flow<Result<PlotInfo>> = flow {
 
         val intervalType = if (interval == "sixHours") {
             IntervalType.SIX_HOURS_INTERVAL
@@ -64,14 +69,16 @@ class WebServicePlotInfoRemoteDataSource @Inject constructor(
 
             if (!paused && !intervalPaused) {
                 emit(Result.runCatching {
-                    telemetryApiService.getSensorsData(interval)
+                    withContext(Dispatchers.IO) {
+                        mapper.mapPlotInfo(telemetryApiService.getSensorsData(interval))
+                    }
                 })
             }
             delay(PLOT_SECONDS_REFRESH_PERIOD * 1000L)
         }
     }
 
-    override val hourSensorsData: Flow<Result<List<SensorDataDto>>> = createHourSensorsDataFlow("hour")
-    override val sixHoursSensorsData: Flow<Result<List<SensorDataDto>>> = createHourSensorsDataFlow("sixHours")
-    override val daySensorsData: Flow<Result<List<SensorDataDto>>> = createHourSensorsDataFlow("day")
+    override val hourSensorsData: Flow<Result<PlotInfo>> = createHourSensorsDataFlow("hour")
+    override val sixHoursSensorsData: Flow<Result<PlotInfo>> = createHourSensorsDataFlow("sixHours")
+    override val daySensorsData: Flow<Result<PlotInfo>> = createHourSensorsDataFlow("day")
 }
