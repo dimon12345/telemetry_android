@@ -12,24 +12,13 @@ fun TelemetryApp(
     viewModel: TelemetryAppViewModel,
     modifier: Modifier = Modifier
 ) {
-    val navigationType: TelemetryAppNavigationType
-
     val telemetryAppUiState = viewModel.uiState.collectAsState().value
 
-    when (windowSize) {
-        WindowWidthSizeClass.Compact -> {
-            navigationType = TelemetryAppNavigationType.BOTTOM_NAVIGATION
-        }
-        WindowWidthSizeClass.Medium -> {
-            navigationType = TelemetryAppNavigationType.NAVIGATION_RAIL
-        }
-        WindowWidthSizeClass.Expanded -> {
-            navigationType = TelemetryAppNavigationType.NAVIGATION_RAIL
-        }
-        else -> {
-            navigationType = TelemetryAppNavigationType.BOTTOM_NAVIGATION
-        }
+    val navigationType = when (windowSize) {
+        WindowWidthSizeClass.Compact -> {TelemetryAppNavigationType.BOTTOM_NAVIGATION}
+        else -> {TelemetryAppNavigationType.NAVIGATION_RAIL}
     }
+
     TelemetryHomeScreen(
         navigationType,
         telemetryAppUiState,
