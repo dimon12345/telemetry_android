@@ -43,35 +43,38 @@ fun TelemetryHomeScreen(
         NavigationItemContent(
             navigationAppContentType = NavigationAppContentType.PLOT_HOUR_CONTENT_TYPE,
             icon = R.drawable.twotone_stacked_line_chart_24,
-            text = stringResource(id = R.string.one_hour_title)
+            text = stringResource(id = R.string.one_hour_title),
+            title = stringResource(id = R.string.plot_hour_page_title),
         ),
         NavigationItemContent(
             navigationAppContentType = NavigationAppContentType.PLOT_SIX_HOURS_CONTENT_TYPE,
             icon = R.drawable.twotone_stacked_line_chart_24,
-            text = stringResource(id = R.string.six_hour_title)
+            text = stringResource(id = R.string.six_hour_title),
+            stringResource(id = R.string.plot_six_hours_page_title),
         ),
         NavigationItemContent(
             navigationAppContentType = NavigationAppContentType.PLOT_DAY_CONTENT_TYPE,
             icon = R.drawable.twotone_stacked_line_chart_24,
-            text = stringResource(id = R.string.one_day_title)
+            text = stringResource(id = R.string.one_day_title),
+            stringResource(id = R.string.plot_day_page_title)
         ),
         NavigationItemContent(
             navigationAppContentType = NavigationAppContentType.SENSORS_CONTENT_TYPE,
             icon = R.drawable.twotone_sensors_24,
+            text = "",
+            title = stringResource(id = R.string.sensors_page_title),
         ),
         NavigationItemContent(
             navigationAppContentType = NavigationAppContentType.SETTINGS_CONTENT_TYPE,
             icon = R.drawable.twotone_settings_24,
+            text = "",
+            title = stringResource(id = R.string.settings_page_title),
         )
     )
 
-    val title = when (telemetryAppUiState.currentTelemetryAppContent) {
-        NavigationAppContentType.PLOT_HOUR_CONTENT_TYPE-> stringResource(id = R.string.plot_hour_page_title)
-        NavigationAppContentType.PLOT_SIX_HOURS_CONTENT_TYPE-> stringResource(id = R.string.plot_six_hours_page_title)
-        NavigationAppContentType.PLOT_DAY_CONTENT_TYPE-> stringResource(id = R.string.plot_day_page_title)
-        NavigationAppContentType.SENSORS_CONTENT_TYPE-> stringResource(id = R.string.sensors_page_title)
-        NavigationAppContentType.SETTINGS_CONTENT_TYPE-> stringResource(id = R.string.settings_page_title)
-    }
+    val title = navigationItemContentList.find { navigationItemContent ->
+        navigationItemContent.navigationAppContentType == telemetryAppUiState.currentTelemetryAppContent
+    }?.title ?: ""
 
     Scaffold(
         content = {
@@ -79,7 +82,6 @@ fun TelemetryHomeScreen(
                 navigationType,
                 telemetryAppUiState.currentTelemetryAppContent,
                 navigationItemContentList,
-                telemetryAppUiState,
                 onTabPressed,
                 modifier.padding(it))
         },
@@ -90,59 +92,56 @@ fun TelemetryHomeScreen(
 @Composable
 private fun TelemetryAppContent(
     navigationType: TelemetryAppNavigationType,
-    navigationAppContentType: NavigationAppContentType,
+    currentContent: NavigationAppContentType,
     navigationItemContentList: List<NavigationItemContent>,
-    telemetryAppUiState: TelemetryAppUiState,
     onTabPressed: ((NavigationAppContentType) -> Unit),
     modifier: Modifier
 ) {
-    Box(modifier = modifier) {
-        Row(modifier = Modifier.fillMaxSize()) {
-            AnimatedVisibility(visible = navigationType == TelemetryAppNavigationType.NAVIGATION_RAIL) {
-                TelemetryAppNavigationRail(
-                    currentTab = telemetryAppUiState.currentTelemetryAppContent,
-                    onTabPressed = onTabPressed,
-                    navigationItemContentList = navigationItemContentList
-                )
+    Row(modifier = modifier.fillMaxSize()) {
+        AnimatedVisibility(visible = navigationType == TelemetryAppNavigationType.NAVIGATION_RAIL) {
+            TelemetryAppNavigationRail(
+                currentTab = currentContent,
+                onTabPressed = onTabPressed,
+                navigationItemContentList = navigationItemContentList
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.inverseOnSurface)
+        ) {
+            when (currentContent) {
+                NavigationAppContentType.PLOT_HOUR_CONTENT_TYPE ->
+                    HourPlotPage(
+                        modifier = Modifier.weight(1f),
+                    )
+
+                NavigationAppContentType.PLOT_SIX_HOURS_CONTENT_TYPE ->
+                    SixHoursPlotPage(
+                        modifier = Modifier.weight(1f),
+                    )
+
+                NavigationAppContentType.PLOT_DAY_CONTENT_TYPE ->
+                    DayPlotPage(
+                        modifier = Modifier.weight(1f),
+                    )
+
+                NavigationAppContentType.SETTINGS_CONTENT_TYPE ->
+                    SettingsPage(modifier = Modifier.weight(1f))
+
+                NavigationAppContentType.SENSORS_CONTENT_TYPE ->
+                    SensorsPage(modifier = Modifier.weight(1f))
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.inverseOnSurface)
+            AnimatedVisibility(
+                visible = navigationType == TelemetryAppNavigationType.BOTTOM_NAVIGATION
             ) {
-                when (navigationAppContentType) {
-                    NavigationAppContentType.PLOT_HOUR_CONTENT_TYPE ->
-                        HourPlotPage(
-                            modifier = Modifier.weight(1f),
-                        )
-
-                    NavigationAppContentType.PLOT_SIX_HOURS_CONTENT_TYPE ->
-                        SixHoursPlotPage(
-                            modifier = Modifier.weight(1f),
-                        )
-
-                    NavigationAppContentType.PLOT_DAY_CONTENT_TYPE ->
-                        DayPlotPage(
-                            modifier = Modifier.weight(1f),
-                        )
-
-                    NavigationAppContentType.SETTINGS_CONTENT_TYPE ->
-                        SettingsPage(modifier = Modifier.weight(1f))
-
-                    NavigationAppContentType.SENSORS_CONTENT_TYPE ->
-                        SensorsPage(modifier = Modifier.weight(1f))
-                }
-
-                AnimatedVisibility(
-                    visible = navigationType == TelemetryAppNavigationType.BOTTOM_NAVIGATION
-                ) {
-                    TelemetryAppBottomNavigationBar(
-                        currentTab = telemetryAppUiState.currentTelemetryAppContent,
-                        onTabPressed = onTabPressed,
-                        navigationItemContentList = navigationItemContentList,
-                    )
-                }
+                TelemetryAppBottomNavigationBar(
+                    currentTab = currentContent,
+                    onTabPressed = onTabPressed,
+                    navigationItemContentList = navigationItemContentList,
+                )
             }
         }
     }
@@ -207,5 +206,6 @@ private fun TelemetryAppBottomNavigationBar(
 private data class NavigationItemContent (
     val navigationAppContentType: NavigationAppContentType,
     val icon: Int,
-    val text: String = "",
+    val text: String,
+    val title: String,
 )
