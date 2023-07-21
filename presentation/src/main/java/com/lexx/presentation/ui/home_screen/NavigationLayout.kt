@@ -25,7 +25,7 @@ fun NavigationLayout(
             LeftNavigationRail(
                 currentTab = currentContent,
                 onTabPressed = onTabPressed,
-                navigationItemContentList = navigationItemContentList
+                navigationItemContentList = navigationItemContentList,
             )
         }
 
@@ -52,4 +52,3 @@ fun NavigationLayout(
         }
     }
 }
-

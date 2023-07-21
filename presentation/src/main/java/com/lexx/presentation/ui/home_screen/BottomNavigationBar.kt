@@ -18,18 +18,18 @@ fun BottomNavigationBar(
     modifier: Modifier = Modifier
 ) {
     NavigationBar(modifier = modifier) {
-        for (navItem in navigationItemContentList) {
+        for (item in navigationItemContentList) {
             NavigationBarItem(
-                selected = currentTab == navItem.appContentType,
-                onClick = { onTabPressed(navItem.appContentType) },
+                selected = currentTab == item.appContentType,
+                onClick = { onTabPressed(item.appContentType) },
                 label = {
                     Text(
-                        text = navItem.tabLabel
+                        text = item.tabLabel
                     )
                 },
                 icon = {
                     Icon(
-                        painter = painterResource(id = navItem.tabIcon),
+                        painter = painterResource(id = item.tabIcon),
                         contentDescription = null
                     )
                 }

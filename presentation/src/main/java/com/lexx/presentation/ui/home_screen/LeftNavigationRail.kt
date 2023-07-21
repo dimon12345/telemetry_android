@@ -15,9 +15,8 @@ fun LeftNavigationRail(
     currentTab: AppContentType,
     onTabPressed: ((AppContentType) -> Unit),
     navigationItemContentList: List<NavigationItemContent>,
-    modifier: Modifier = Modifier
 ) {
-    NavigationRail(modifier = modifier) {
+    NavigationRail {
         for (navItem in navigationItemContentList) {
             NavigationRailItem(
                 selected = currentTab == navItem.appContentType,
