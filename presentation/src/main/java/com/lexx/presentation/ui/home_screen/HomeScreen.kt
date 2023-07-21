@@ -13,13 +13,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lexx.presentation.R
 import com.lexx.presentation.models.navigation.NavigationItemContent
 import com.lexx.presentation.ui.navigation.AppContentType
-import com.lexx.presentation.ui.navigation.NavigationType
+import com.lexx.presentation.ui.navigation.AppNavigationType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelemetryHomeScreen(
+fun HomeScreen(
     modifier: Modifier = Modifier,
-    navigationType: NavigationType,
+    appNavigationType: AppNavigationType = AppNavigationType.NAVIGATION_RAIL,
     viewModel: HomeScreenViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsState().value
@@ -63,15 +63,22 @@ fun TelemetryHomeScreen(
 
     Scaffold(
         content = {
-            TelemetryAppContent(
-                navigationType,
+            NavigationLayout(
+                appNavigationType,
                 uiState.currentTelemetryAppContent,
                 navigationItemContentList,
+                modifier = modifier.padding(it),
                 onTabPressed = {
-                    viewModel.updateNavigationContent(it)
+                    viewModel.updateAppContent(it)
                 },
-                modifier.padding(it))
+            )
         },
-        topBar = { TopAppBar(title = {Text(title)})}
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(title)
+                }
+            )
+        }
     )
 }

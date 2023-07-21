@@ -24,7 +24,7 @@ class HomeScreenViewModel @Inject constructor(
 
     val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
 
-    fun updateNavigationContent(appContentType: AppContentType) {
+    fun updateAppContent(appContentType: AppContentType) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(currentTelemetryAppContent = appContentType)
 

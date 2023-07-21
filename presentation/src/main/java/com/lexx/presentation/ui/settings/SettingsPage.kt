@@ -21,8 +21,8 @@ import com.lexx.presentation.ui.settings.SettingsViewModel
 
 @Composable
 fun SettingsPage(
+    modifier: Modifier = Modifier,
     settingsViewModel: SettingsViewModel = viewModel(),
-    modifier: Modifier = Modifier
 ) {
     val settingsUiState by settingsViewModel.uiState.collectAsState()
 

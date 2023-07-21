@@ -3,25 +3,25 @@ package com.lexx.presentation.ui
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.lexx.presentation.ui.home_screen.TelemetryHomeScreen
-import com.lexx.presentation.ui.navigation.NavigationType
+import com.lexx.presentation.ui.home_screen.HomeScreen
+import com.lexx.presentation.ui.navigation.AppNavigationType
 
 @Composable
 fun TelemetryApp(
     modifier: Modifier = Modifier,
     windowSize: WindowWidthSizeClass,
 ) {
-    val navigationType = when (windowSize) {
+    val appNavigationType = when (windowSize) {
         WindowWidthSizeClass.Compact -> {
-            NavigationType.BOTTOM_NAVIGATION
+            AppNavigationType.BOTTOM_NAVIGATION
         }
         else -> {
-            NavigationType.NAVIGATION_RAIL
+            AppNavigationType.NAVIGATION_RAIL
         }
     }
 
-    TelemetryHomeScreen(
+    HomeScreen(
         modifier = modifier,
-        navigationType = navigationType,
+        appNavigationType = appNavigationType,
     )
 }
