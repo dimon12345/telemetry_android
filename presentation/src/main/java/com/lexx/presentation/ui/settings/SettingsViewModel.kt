@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lexx.domain.features.settings.GetServerAddressUseCase
 import com.lexx.domain.features.settings.SetServerAddressUseCase
-import com.lexx.presentation.models.SettingsUiState
+import com.lexx.presentation.models.settings.SettingsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

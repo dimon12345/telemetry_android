@@ -9,8 +9,8 @@ import com.lexx.domain.features.sensors.SetSensorLocalInfoUseCase
 import com.lexx.domain.features.sensors.local.SensorLocalInfo
 import com.lexx.domain.models.SensorInfo
 import com.lexx.presentation.mapping.UiMapper
-import com.lexx.presentation.models.SensorUiInfo
-import com.lexx.presentation.models.SensorsUiState
+import com.lexx.presentation.models.sensors.SensorUiInfo
+import com.lexx.presentation.models.sensors.SensorsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
