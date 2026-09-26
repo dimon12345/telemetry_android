@@ -2,6 +2,7 @@ package com.lexx.presentation.ui.sensors
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -93,22 +96,25 @@ fun SensorCard(
     onClick: (sensorInfo: SensorUiInfo) -> Unit,
     modifier: Modifier.Companion
 ) {
+    val color = if (enabled) {
+        sensorInfo.color
+    } else {
+        Color.Gray
+    }
+
     Button(
         onClick = { onClick(sensorInfo) },
         modifier = modifier
             .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 8.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = color),
+        shape = RoundedCornerShape(8.dp),
+        contentPadding = PaddingValues(0.dp)
     ) {
-        val color = if (enabled) {
-            sensorInfo.color
-        } else {
-            Color.Gray
-        }
-
         Card(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 12.dp),
-            colors = CardDefaults.cardColors(containerColor=color)
+                .padding(vertical = 8.dp, horizontal = 12.dp)
         ) {
             Column(
                 Modifier
