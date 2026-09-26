@@ -1,14 +1,16 @@
 plugins {
     id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'dagger.hilt.android.plugin'
-    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+    id 'com.google.devtools.ksp'
+
     id 'org.jetbrains.kotlin.plugin.compose'
+    id 'org.jetbrains.kotlin.android'
+
 }
 
 android {
     namespace 'com.lexx.presentation'
-    compileSdk 33
+    compileSdk = 37
 
     defaultConfig {
         minSdk 26
@@ -27,9 +29,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = '17'
-    }
     buildFeatures {
         compose true
     }
@@ -42,9 +41,13 @@ android {
     testOptions {
         targetSdk 33
     }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 dependencies {
+    implementation 'androidx.core:core-ktx:1.19.1'
     implementation project(path: ':domain')
 
     // Color Picker
@@ -65,7 +68,8 @@ dependencies {
 
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    ksp "com.google.dagger:hilt-compiler:$hilt_version"
+
 
     // JetPack
     implementation 'androidx.core:core-ktx:1.10.1'

@@ -1,18 +1,18 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.dagger.hilt.android'
+    id 'com.google.devtools.ksp'
     id 'org.jetbrains.kotlin.android'
-    id 'dagger.hilt.android.plugin'
-    id 'kotlin-kapt'
 }
 
 android {
-    namespace 'com.lexx.telemetry'
-    compileSdk 34
+    namespace = 'com.lexx.telemetry'
+    compileSdk = 37
 
     defaultConfig {
         applicationId "com.lexx.telemetry"
         minSdk 26
-        targetSdkVersion 34
+        targetSdkVersion 37
         versionCode 1
         versionName "0.1"
 
@@ -32,20 +32,18 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = '17'
-    }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-    hilt {
-        enableAggregatingTask = true
+    kotlinOptions {
+        jvmTarget = '17'
     }
 }
 
 dependencies {
+    implementation 'androidx.core:core-ktx:1.19.1'
     implementation project(path: ':domain')
     implementation project(path: ':data')
     implementation project(path: ':presentation')
@@ -55,7 +53,7 @@ dependencies {
 
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    ksp "com.google.dagger:hilt-compiler:$hilt_version"
 
     // tests
     testImplementation "junit:junit:$junit_version"
