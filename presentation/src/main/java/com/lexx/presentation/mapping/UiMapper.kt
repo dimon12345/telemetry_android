@@ -25,7 +25,7 @@ class UiMapper @Inject constructor(
     }
 
     fun mapTimestampToScreen(timestamp: Long): String {
-        val netDate = Date(timestamp * 1000 - 6 * 60 * 60 * 1000)
+        val netDate = Date(timestamp * 1000)
         return simpleDateFormat.format(netDate)
     }
 

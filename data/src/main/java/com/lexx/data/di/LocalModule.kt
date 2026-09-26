@@ -5,7 +5,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
-import com.lexx.data.api.telemetry.util.RemoteDbTimeFormatterBuilder
 import com.lexx.data.db.room.LocalDatabase
 import com.lexx.data.features.sensors.local.LocalSensorDataDao
 import dagger.Module
@@ -13,7 +12,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import java.time.format.DateTimeFormatter
 import javax.inject.Singleton
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
@@ -25,13 +23,6 @@ object LocalModule {
     @Singleton
     fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
         return context.dataStore
-    }
-
-    @Provides
-    @Singleton
-    fun provideDataFormatter(): DateTimeFormatter {
-        return RemoteDbTimeFormatterBuilder()
-            .build()
     }
 
     @Provides

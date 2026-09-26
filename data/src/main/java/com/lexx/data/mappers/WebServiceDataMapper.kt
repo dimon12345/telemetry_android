@@ -11,9 +11,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-class WebServiceDataMapper @Inject constructor(
-    private val dateTimeFormatter: DateTimeFormatter
-) {
+class WebServiceDataMapper @Inject constructor() {
     fun mapSensors(sensorsInfoDto: List<SensorInfoDto>): List<SensorInfo> {
         return sensorsInfoDto.map {
             mapSensor(sensorInfoDto = it)
@@ -33,7 +31,7 @@ class WebServiceDataMapper @Inject constructor(
 
     private fun mapStringTimeToLong(ts: String) : Long {
         return LocalDateTime
-            .parse(ts, dateTimeFormatter)
+            .parse(ts, DateTimeFormatter.ISO_DATE_TIME)
             .toEpochSecond(ZoneOffset.UTC)
     }
 
