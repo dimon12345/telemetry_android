@@ -17,7 +17,7 @@ class OkHttpInterceptor @Inject constructor(
             serverAddress = settingsRepository.getServerAddress()
         }
 
-        val serverPath: String = request.url().encodedPath()
+        val serverPath: String = request.url.encodedPath
         val url = "http://${serverAddress}${serverPath}"
         val newRequest = request
             .newBuilder()
