@@ -2,7 +2,6 @@ plugins {
     id ("com.android.application")
     id ("com.google.dagger.hilt.android")
     id ("com.google.devtools.ksp")
-    id ("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -12,7 +11,7 @@ android {
     defaultConfig {
         applicationId = "com.lexx.telemetry"
         minSdk = 26
-        targetSdkVersion(37)
+        targetSdk { version = release(37) }
         versionCode = 1
         versionName = "0.1"
 
@@ -28,20 +27,10 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-        }
-    }
-    packagingOptions {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 }
 
