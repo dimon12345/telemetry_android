@@ -71,8 +71,8 @@ class UiMapper @Inject constructor(
         if (plotInfo.values.isEmpty()) {
             return PlotUiInfo()
         }
-        var minValue = Float.MAX_VALUE
-        var maxValue = Float.MIN_VALUE
+        var minValue = Float.POSITIVE_INFINITY
+        var maxValue = Float.NEGATIVE_INFINITY
         var minTimestamp = Long.MAX_VALUE
         var maxTimestamp = Long.MIN_VALUE
         for (line in plotInfo.values) {

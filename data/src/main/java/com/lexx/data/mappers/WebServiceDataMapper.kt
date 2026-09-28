@@ -41,8 +41,8 @@ class WebServiceDataMapper @Inject constructor() {
         }
 
         val points: MutableMap<Int, MutableList<PlotData>> = mutableMapOf()
-        var minValue = Float.MAX_VALUE
-        var maxValue = Float.MIN_VALUE
+        var minValue = Float.POSITIVE_INFINITY
+        var maxValue = Float.NEGATIVE_INFINITY
         var minTimestamp = mapStringTimeToLong(sensorsData[0].timestamp)
         var maxTimestamp = minTimestamp
 
